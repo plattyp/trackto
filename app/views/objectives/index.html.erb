@@ -1,0 +1,19 @@
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Target Goal</th>
+    <th>Progress</th>
+    <th>Action</th>
+  </tr>
+  <% @objectives.each do |o| %>
+  <tr>
+    <td><%= o[:name] %></td>
+    <td><%= o[:description] %></td>
+    <td><%= o[:targetgoal] %></td>
+    <td><%= o[:progress] %></td>
+    <td><%= link_to "Delete", objective_path(o[:id]), method: :delete %></td>
+  </tr>
+  <% end %>
+</table><br />
+<%= link_to "Add a Objective", new_objective_path %>

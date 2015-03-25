@@ -36,6 +36,19 @@ RSpec.describe Objective, :type => :model do
         expect(objective.save).to eq false
       end
     end
+    context 'targetgoal' do
+      it 'allows to save if targetgoal is an integer' do
+        objective = build(:objective)
+        objective.targetgoal = 1
+        expect(objective.save).to eq true
+      end
+
+      it 'does not allow to save if targetgoal is not an integer' do
+        objective = build(:objective)
+        objective.targetgoal = "Andrew"
+        expect(objective.save).to eq false
+      end
+    end
   end
 
   describe 'scopes' do
@@ -48,9 +61,47 @@ RSpec.describe Objective, :type => :model do
 
     describe 'all_objectives' do
       it 'returns a list of objectives by most recently created' do
-        expect(described_class.all_objectives).to eq [@objective3, @objective2, @objective1]
+        expect(described_class.recent_objectives).to eq [@objective3, @objective2, @objective1]
       end
     end
 
+  end
+
+  describe 'progress' do
+    it 'returns 0 if there is no progress for the objective' do
+      objective = create(:objective)
+
+      expect(objective.progress).to eq 0
+    end
+    it 'returns 1 if progress has been incremeted by the amount of 1' do
+      objective = create(:objective)
+      progress = create(:progress, amount: 1, objective_id: objective.id)
+
+      expect(objective.progress).to eq 1
+    end
+  end
+
+  describe 'recent_objectives_with_progress' do
+    before(:each) do
+      Objective.delete_all
+    end
+
+    it 'returns an empty array if there are no objectives' do
+      expect(described_class.recent_objectives_with_progress).to eq []
+    end
+
+    it 'returns an array of 1 hash if 1 objective is available' do
+      o = create(:objective)
+      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress}]
+    end
+
+    it 'returns an array of 2 hashes in most recent order if 2 objectives are available' do
+      o = create(:objective)
+      p = create(:objective)
+      expect(described_class.recent_objectives_with_progress).to eq [
+        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, progress: p.progress},
+        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress}
+      ]
+    end
   end
 end

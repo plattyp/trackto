@@ -1,12 +1,16 @@
 class ObjectivesController < ApplicationController
-
+  respond_to
   def index
-    @objectives = Objective.all_objectives
+    @objectives = Objective.recent_objectives_with_progress
 
     respond_to do |format|
       format.html
       format.json { render json: @objectives.to_json }
     end
+  end
+
+  def new
+    @objective = Objective.new
   end
 
   def create
