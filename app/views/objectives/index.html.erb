@@ -4,7 +4,8 @@
     <th>Description</th>
     <th>Target Goal</th>
     <th>Progress</th>
-    <th>Action</th>
+    <th>Change Progress</th>
+    <th>Delete</th>
   </tr>
   <% @objectives.each do |o| %>
   <tr>
@@ -12,6 +13,7 @@
     <td><%= o[:description] %></td>
     <td><%= o[:targetgoal] %></td>
     <td><%= o[:progress] %></td>
+    <td><%= link_to "Update Progress", new_objective_progress_path(o[:id]) %></td>
     <td><%= link_to "Delete", objective_path(o[:id]), method: :delete %></td>
   </tr>
   <% end %>

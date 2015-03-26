@@ -81,7 +81,7 @@ RSpec.describe Objective, :type => :model do
     end
   end
 
-  describe 'recent_objectives_with_progress' do
+  describe '#recent_objectives_with_progress' do
     before(:each) do
       Objective.delete_all
     end
