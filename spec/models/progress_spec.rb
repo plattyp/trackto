@@ -29,11 +29,38 @@ RSpec.describe Progress, :type => :model do
     end
   end
 
-  describe '#progress_history_for_objective' do
+  describe 'scopes' do
+    describe '#recent_progress' do
+      before(:all) do
+        Progress.delete_all
+      end
+
+      it 'returns an empty array when there are is no progress' do
+        expect(described_class.recent_progress).to eq []
+      end
+
+      it 'returns all progress objects in an array in decending order of creation' do
+        progress1 = create(:progress)
+        progress2 = create(:progress)
+
+        expect(described_class.recent_progress). to eq [progress2,progress1]
+      end
+
+    end
+  end
+
+  describe '#progress_history' do
     it 'returns an empty array if objective is not found' do
+      objective = create(:objective)
+      expect(described_class.progress_history(objective)).to eq []
     end
 
     it 'returns an array of hashes of all progress for a given objective' do
+      objective = create(:objective)
+      progress1 = create(:progress, amount: 10, objective: objective)
+      progress2 = create(:progress, amount: 10, objective: objective)
+
+      expect(described_class.progress_history(objective)).to eq [progress2,progress1]
     end
   end
 end

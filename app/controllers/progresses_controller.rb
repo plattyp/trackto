@@ -1,12 +1,20 @@
 class ProgressesController < ApplicationController
+  before_filter :find_objective
+
+  def index
+    @progresses = Progress.progress_history(@objective)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @progresses.to_json }
+    end
+  end
 
   def new
-    @objective = Objective.find(params[:objective_id])
     @progress = @objective.progresses.build
   end
 
   def create
-    @objective = Objective.find(params[:objective_id])
     @progress = @objective.progresses.build(progress_params)
     
     if @progress.save
@@ -17,6 +25,10 @@ class ProgressesController < ApplicationController
   end
 
   private
+
+  def find_objective
+    @objective = Objective.find(params[:objective_id])
+  end
 
   def progress_params
     params.require(:progress).permit(:amount, :objective_id)

@@ -1,3 +1,5 @@
 <h1><%= @objective.name %></h1><br />
 <p><%= @objective.description %></p><br />
 
+<h2>All Progress</h2>
+<%= render :partial => 'progresses/partials/progresstable', locals: {progresses: @progress} %>

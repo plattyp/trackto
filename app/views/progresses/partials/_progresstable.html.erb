@@ -1,0 +1,12 @@
+<table>
+	<tr>
+	  <th>Amount</th>
+	  <th>Date</th>
+	</tr>
+	<% progresses.each do |p| %>
+	<tr>
+	  <td><%= p.amount %></td>
+	  <td><%= p.created_at.in_time_zone("Central Time (US & Canada)") %></td>
+	</tr>
+	<% end %>
+</table>

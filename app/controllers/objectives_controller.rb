@@ -11,6 +11,7 @@ class ObjectivesController < ApplicationController
 
   def show
     @objective = Objective.find(params[:id])
+    @progress = Progress.progress_history(@objective)
   end
 
   def new

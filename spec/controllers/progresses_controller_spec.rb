@@ -2,6 +2,38 @@ require 'rails_helper'
 
 RSpec.describe ProgressesController, :type => :controller do
 
+  describe 'GET index' do
+    before(:each) do
+      @objective = create(:objective)
+    end
+
+    it 'assigns an empty array to @progresses if there is no progress associated with an objective' do
+      get :index, objective_id: @objective.id
+      expect(assigns(:progresses)).to eq []
+    end
+
+    it 'assigns an all progress by recent order to @progresses if there is progress associated with an objective' do
+      progress1 = create(:progress, objective: @objective)
+      progress2 = create(:progress, objective: @objective)
+
+      get :index, objective_id: @objective.id
+      expect(assigns(:progresses)).to eq [progress2,progress1]
+    end
+
+    it 'renders a index template when using html' do
+      get :index, objective_id: @objective.id, format: :html
+      expect(response).to render_template :index
+    end
+
+    it 'renders @progresses when using json' do
+      progress1 = create(:progress, objective: @objective)
+      progress2 = create(:progress, objective: @objective)
+      
+      get :index, objective_id: @objective.id, format: :json
+      expect(response.body).to eq [progress2,progress1].to_json
+    end
+  end
+
   describe 'GET new' do
     before(:each) do
       @objective = create(:objective)

@@ -44,6 +44,13 @@ RSpec.describe ObjectivesController, :type => :controller do
       expect(assigns(:objective)).to eq @objective
     end
 
+    it 'assigns @progress with all progress in recent order associated to the id' do
+      progress1 = create(:progress, objective: @objective)
+      progress2 = create(:progress, objective: @objective)
+
+      expect(assigns(:progress)).to eq [progress2,progress1]
+    end
+
     it 'renders a show template' do
       expect(response).to render_template :show
     end
