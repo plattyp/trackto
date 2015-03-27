@@ -37,10 +37,10 @@ RSpec.describe ObjectivesController, :type => :controller do
   describe 'GET show' do
     before(:each) do
       @objective = create(:objective)
-      get :show, id: @objective, format: :html
     end
 
     it 'assigns @objective with the corresponding object to the id' do
+      get :show, id: @objective, format: :html
       expect(assigns(:objective)).to eq @objective
     end
 
@@ -48,11 +48,23 @@ RSpec.describe ObjectivesController, :type => :controller do
       progress1 = create(:progress, objective: @objective)
       progress2 = create(:progress, objective: @objective)
 
+      get :show, id: @objective, format: :html
       expect(assigns(:progress)).to eq [progress2,progress1]
     end
 
     it 'renders a show template' do
+      get :show, id: @objective, format: :html
       expect(response).to render_template :show
+    end
+
+    it 'responds with a status of success on success when using json' do
+      get :show, id: @objective, format: :json
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'renders show.json.erb template when using json' do
+      get :show, id: @objective, format: :json
+      expect(response).to render_template 'objectives/json/show.json.erb'      
     end
   end
 

@@ -12,6 +12,11 @@ class ObjectivesController < ApplicationController
   def show
     @objective = Objective.find(params[:id])
     @progress = Progress.progress_history(@objective)
+
+    respond_to do |format|
+      format.html
+      format.json { render 'objectives/json/show.json.erb', status: 200, content_type: 'application/json' }
+    end
   end
 
   def new
@@ -26,7 +31,7 @@ class ObjectivesController < ApplicationController
         format.json { render json: @objective.to_json, status: 200 }
       else
         format.html { redirect_to new_objective_path, notice: 'Objective was unable to be created' }
-        format.json { render json: @objective.errors, status: :unprocessable_entity }
+        format.json { render json: @objective.errors.to_json, status: :unprocessable_entity }
       end
     end
   end

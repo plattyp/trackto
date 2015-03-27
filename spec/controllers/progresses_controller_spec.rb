@@ -28,7 +28,7 @@ RSpec.describe ProgressesController, :type => :controller do
     it 'renders @progresses when using json' do
       progress1 = create(:progress, objective: @objective)
       progress2 = create(:progress, objective: @objective)
-      
+
       get :index, objective_id: @objective.id, format: :json
       expect(response.body).to eq [progress2,progress1].to_json
     end
@@ -74,6 +74,16 @@ RSpec.describe ProgressesController, :type => :controller do
     it 'redirects to new objective progress path on failure using html' do
       post :create, progress: attributes_for(:progress, amount: nil), objective_id: @objective.id, format: :html
       expect(response).to redirect_to new_objective_progress_path(@objective)
+    end
+
+    it 'responds with a status of success on success when using json' do
+      post :create, progress: attributes_for(:progress, amount: 10), objective_id: @objective.id, format: :json
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'responds with a status of unprocessable entity on failure when using json' do
+      post :create, progress: attributes_for(:progress, amount: nil), objective_id: @objective.id, format: :json
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
