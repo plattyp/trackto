@@ -39,9 +39,11 @@ group :test do
 	gem 'selenium-webdriver'
 end
 
-# For Heroku
-gem 'rails_12factor', group: :production
-
 # For Application Server
 gem 'foreman'
 gem 'puma'
+
+# For Heroku
+gem 'rails_12factor', group: :production
+
+ruby "2.0.0"
