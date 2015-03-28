@@ -40,5 +40,6 @@ test:
 production:
   <<: *default
   database: trackto_production
+  url: <%= ENV["db_url"] %>
   username: <%= ENV["db_username"] %>
   password: <%= ENV["db_password"] %>
