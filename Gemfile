@@ -38,3 +38,10 @@ group :test do
 	gem 'launchy' 
 	gem 'selenium-webdriver'
 end
+
+# For Heroku
+gem 'rails_12factor', group: :production
+
+# For Application Server
+gem 'foreman'
+gem 'puma'
