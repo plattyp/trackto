@@ -5,7 +5,7 @@ class ObjectivesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @objectives.to_json }
+      format.json { render 'objectives/json/index.json.erb', status: 200, content_type: 'application/json' }
     end
   end
 

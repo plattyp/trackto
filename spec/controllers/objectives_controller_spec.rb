@@ -19,17 +19,13 @@ RSpec.describe ObjectivesController, :type => :controller do
       ]
     end
 
-    it 'loads a list of objectives when using JSON' do
+    it 'renders the index json view using json' do
       get :index, format: :json
-      expect(response.body).to eq [
-        {id: @objectivethree.id, name: @objectivethree.name, description: @objectivethree.description, targetgoal: @objectivethree.targetgoal, progress: @objectivethree.progress},
-        {id: @objectivetwo.id, name: @objectivetwo.name, description: @objectivetwo.description, targetgoal: @objectivetwo.targetgoal, progress: @objectivetwo.progress},
-        {id: @objectiveone.id, name: @objectiveone.name, description: @objectiveone.description, targetgoal: @objectiveone.targetgoal, progress: @objectiveone.progress}
-      ].to_json
+      expect(response).to render_template 'objectives/json/index.json.erb'
     end
 
-    it 'renders the index view' do
-      get :index
+    it 'renders the index view using html' do
+      get :index, format: :html
       expect(response).to render_template :index
     end
   end

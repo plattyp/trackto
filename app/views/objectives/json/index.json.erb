@@ -1,0 +1,13 @@
+{"objectives":
+  [
+  <% @objectives.each do |o| %>
+  {
+    "id": <%= o[:id] %>,
+    "name": "<%= o[:name] %>",
+    "description": "<%= o[:description] %>",
+    "targetgoal": <%= o[:targetgoal] %>,
+    "progress": <%= o[:progress] %>
+  }<%= ',' unless @objectives.last == o %>
+  <% end %>
+  ]
+}
