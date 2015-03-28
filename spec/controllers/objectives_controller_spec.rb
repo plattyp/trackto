@@ -110,11 +110,20 @@ RSpec.describe ObjectivesController, :type => :controller do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @objective = create(:objective)
+      @objective = create(:objective, :with_progress)
     end
 
     it 'deletes an objective' do
       expect{delete :destroy, id: @objective}.to change{Objective.all.count}.by(-1)
+    end
+
+    it 'deletes all corresponding progress when the related objective is deleted' do
+      progressids = Array.new
+      @objective.progresses.each do |p|
+        progressids << p.id
+      end
+
+      expect{delete :destroy, id: @objective}.to change{Progress.where(id: progressids).count}.to(0)
     end
 
     it 'redirects to objectives path on success when using html' do

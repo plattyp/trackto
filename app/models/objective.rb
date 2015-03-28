@@ -1,5 +1,5 @@
 class Objective < ActiveRecord::Base
-  has_many :progresses
+  has_many :progresses, :dependent => :destroy
 
   validates :name, length: { in: 1..250 }
   validates :description, length: { maximum: 500 }
