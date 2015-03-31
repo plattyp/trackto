@@ -4,14 +4,15 @@
     "name": "<%= @objective.name %>",
     "description": "<%= @objective.description %>",
     "targetgoal": <%= @objective.targetgoal %>,
-    "created_date": "<%= @objective.created_at %>"
+    "created_at": "<%= @objective.created_at %>",
+    "updated_at": "<%= @objective.updated_at %>"
   },
   "progress:":
   [
     <% @progress.each do |p| %>
       {
         "amount": <%= p.amount %>,
-        "created_date": "<%= p.created_at %>"
+        "created_at": "<%= p.created_at %>"
       }<%= ',' unless @progress.last == p %>
     <% end %>
   ]

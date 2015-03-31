@@ -10,7 +10,7 @@ class Objective < ActiveRecord::Base
   def self.recent_objectives_with_progress
     objectives = []
     Objective.recent_objectives.each do |p|
-      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, progress: p.progress}
+      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, progress: p.progress, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s}
     end
     objectives
   end

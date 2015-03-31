@@ -13,9 +13,9 @@ RSpec.describe ObjectivesController, :type => :controller do
     it 'loads an array of objective hashes by most recently created' do
       get :index
       expect(assigns(:objectives)).to eq [
-        {id: @objectivethree.id, name: @objectivethree.name, description: @objectivethree.description, targetgoal: @objectivethree.targetgoal, progress: @objectivethree.progress},
-        {id: @objectivetwo.id, name: @objectivetwo.name, description: @objectivetwo.description, targetgoal: @objectivetwo.targetgoal, progress: @objectivetwo.progress},
-        {id: @objectiveone.id, name: @objectiveone.name, description: @objectiveone.description, targetgoal: @objectiveone.targetgoal, progress: @objectiveone.progress} 
+        {id: @objectivethree.id, name: @objectivethree.name, description: @objectivethree.description, targetgoal: @objectivethree.targetgoal, progress: @objectivethree.progress, created_at: @objectivethree.created_at.to_s, updated_at: @objectivethree.updated_at.to_s},
+        {id: @objectivetwo.id, name: @objectivetwo.name, description: @objectivetwo.description, targetgoal: @objectivetwo.targetgoal, progress: @objectivetwo.progress, created_at: @objectivetwo.created_at.to_s, updated_at: @objectivetwo.updated_at.to_s},
+        {id: @objectiveone.id, name: @objectiveone.name, description: @objectiveone.description, targetgoal: @objectiveone.targetgoal, progress: @objectiveone.progress, created_at: @objectiveone.created_at.to_s, updated_at: @objectiveone.updated_at.to_s} 
       ]
     end
 

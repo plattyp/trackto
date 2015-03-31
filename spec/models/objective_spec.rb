@@ -92,15 +92,15 @@ RSpec.describe Objective, :type => :model do
 
     it 'returns an array of 1 hash if 1 objective is available' do
       o = create(:objective)
-      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress}]
+      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
     end
 
     it 'returns an array of 2 hashes in most recent order if 2 objectives are available' do
       o = create(:objective)
       p = create(:objective)
       expect(described_class.recent_objectives_with_progress).to eq [
-        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, progress: p.progress},
-        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress}
+        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, progress: p.progress, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
+        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
       ]
     end
   end
