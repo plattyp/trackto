@@ -127,6 +127,11 @@ RSpec.describe ObjectivesController, :type => :controller do
       expect(response).to redirect_to objectives_path
     end
 
+    it 'responds with a an @objective object in json when using json' do
+      delete :destroy, id: @objective, format: :json
+      expect(response.body).to eq @objective.to_json
+    end
+
     it 'responds with a success status on success when using json' do
       delete :destroy, id: @objective, format: :json
       expect(response).to have_http_status(:success)

@@ -45,10 +45,10 @@ class ObjectivesController < ApplicationController
     respond_to do |format|
       if @objective.destroyed?
         format.html { redirect_to objectives_path, notice: 'Objective was successfully deleted!' }
-        format.json { head :ok, status: 200 }
+        format.json { render json: @objective.to_json, status: 200 }
       else
         format.html { redirect_to objectives_path, notice: 'Objective was unable to be deleted' }
-        format.json { render @objective.errors, status: :unprocessable_entity }
+        format.json { render json: @objective.errors, status: :unprocessable_entity }
       end
     end
   end
