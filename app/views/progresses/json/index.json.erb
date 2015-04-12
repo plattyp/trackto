@@ -1,0 +1,11 @@
+{"progress":
+  [
+  <% @progresses.each do |p| %>
+  {
+    "id": <%= p[:id] %>,
+    "amount": <%= p[:amount] %>,
+    "created_at": "<%= p[:created_at] %>"
+  }<%= ',' unless @progresses.last == p %>
+  <% end %>
+  ]
+}

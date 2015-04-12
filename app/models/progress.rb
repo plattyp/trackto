@@ -7,6 +7,10 @@ class Progress < ActiveRecord::Base
   scope :recent_progress, -> { order('progresses.created_at DESC') }
 
   def self.progress_history(objective)
-    objective.progresses.recent_progress
+    progress = []
+    objective.progresses.recent_progress.each do |p|
+      progress << {id: p.id, amount: p.amount, created_at: p.created_at.to_s}
+    end
+    progress
   end
 end

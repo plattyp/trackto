@@ -60,7 +60,10 @@ RSpec.describe Progress, :type => :model do
       progress1 = create(:progress, amount: 10, objective: objective)
       progress2 = create(:progress, amount: 10, objective: objective)
 
-      expect(described_class.progress_history(objective)).to eq [progress2,progress1]
+      expect(described_class.progress_history(objective)).to eq [
+        {id: progress2.id, amount: progress2.amount, created_at: progress2.created_at.to_s},
+        {id: progress1.id, amount: progress1.amount, created_at: progress1.created_at.to_s}
+      ]
     end
   end
 end

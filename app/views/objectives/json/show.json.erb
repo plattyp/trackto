@@ -11,8 +11,8 @@
   [
     <% @progress.each do |p| %>
       {
-        "amount": <%= p.amount %>,
-        "created_at": "<%= p.created_at %>"
+        "amount": <%= p[:amount] %>,
+        "created_at": "<%= p[:created_at] %>"
       }<%= ',' unless @progress.last == p %>
     <% end %>
   ]

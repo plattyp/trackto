@@ -17,7 +17,10 @@ RSpec.describe ProgressesController, :type => :controller do
       progress2 = create(:progress, objective: @objective)
 
       get :index, objective_id: @objective.id
-      expect(assigns(:progresses)).to eq [progress2,progress1]
+      expect(assigns(:progresses)).to eq [
+        {id: progress2.id, amount: progress2.amount, created_at: progress2.created_at.to_s},
+        {id: progress1.id, amount: progress1.amount, created_at: progress1.created_at.to_s}
+      ]
     end
 
     it 'renders a index template when using html' do
@@ -25,12 +28,9 @@ RSpec.describe ProgressesController, :type => :controller do
       expect(response).to render_template :index
     end
 
-    it 'renders @progresses when using json' do
-      progress1 = create(:progress, objective: @objective)
-      progress2 = create(:progress, objective: @objective)
-
-      get :index, objective_id: @objective.id, format: :json
-      expect(response.body).to eq [progress2,progress1].to_json
+    it 'renders the index json view using json' do
+      get :index,  objective_id: @objective.id, format: :json
+      expect(response).to render_template 'progresses/json/index.json.erb'
     end
   end
 
