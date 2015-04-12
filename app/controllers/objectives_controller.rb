@@ -56,6 +56,6 @@ class ObjectivesController < ApplicationController
   private
 
   def objective_params
-    params.require(:objective).permit(:name,:description,:targetgoal)
+    params.require(:objective).permit(:name,:description,:targetgoal,:targetdate)
   end
 end

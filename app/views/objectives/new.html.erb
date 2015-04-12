@@ -8,7 +8,10 @@
   <%= f.text_area :description %><br />
 
   <%= f.label "Target Goal" %><br />
-  <%= f.number_field :targetgoal %><br /><br />
+  <%= f.number_field :targetgoal %><br />
+
+  <%= f.label "Target Date" %><br />
+  <%= f.date_field :targetdate %><br /><br />
 
   <%= f.submit %>
 <% end %>

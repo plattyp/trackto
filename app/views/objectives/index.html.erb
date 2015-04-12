@@ -3,6 +3,7 @@
     <th>Name</th>
     <th>Description</th>
     <th>Target Goal</th>
+    <th>Target Date</th>
     <th>Progress</th>
     <th>Change Progress</th>
     <th>Delete</th>
@@ -12,6 +13,7 @@
     <td><%= o[:name] %></td>
     <td><%= o[:description] %></td>
     <td><%= o[:targetgoal] %></td>
+    <td><%= o[:targetdate] %></td>
     <td><%= o[:progress] %></td>
     <td><%= link_to "Update Progress", new_objective_progress_path(o[:id]) %></td>
     <td><%= link_to "Delete", objective_path(o[:id]), method: :delete %></td>

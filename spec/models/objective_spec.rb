@@ -81,6 +81,26 @@ RSpec.describe Objective, :type => :model do
     end
   end
 
+  describe 'target_date' do
+    it 'returns 9999-12-31 if there is not a targetdate set' do
+      objective = create(:objective)
+      expect(objective.target_date).to eq '9999-12-31'.to_date
+    end
+
+    it 'returns the target date if there is one set' do
+      objective = create(:objective_with_targetdate)
+      expect(objective.target_date).to eq objective.targetdate
+    end
+  end
+
+  describe 'pace' do
+    it 'returns (total progress) / (days elapsed) when progress is available' do
+      objective = create(:objective, :with_progress, created_at: Time.now - 5.days)
+      pace = objective.progress / 5.0
+      expect(objective.pace).to eq pace.round(2)
+    end
+  end
+
   describe '#recent_objectives_with_progress' do
     before(:each) do
       Objective.delete_all
@@ -92,15 +112,15 @@ RSpec.describe Objective, :type => :model do
 
     it 'returns an array of 1 hash if 1 objective is available' do
       o = create(:objective)
-      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
+      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: o.target_date, progress: o.progress, pace: o.pace, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
     end
 
     it 'returns an array of 2 hashes in most recent order if 2 objectives are available' do
       o = create(:objective)
       p = create(:objective)
       expect(described_class.recent_objectives_with_progress).to eq [
-        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, progress: p.progress, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
-        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, progress: o.progress, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
+        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
+        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: p.target_date, progress: o.progress, pace: o.pace, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
       ]
     end
   end
