@@ -19,7 +19,7 @@ class Progress < ActiveRecord::Base
     objective = Objective.find_by_id(objective_id)
     if objective
       if potential_progress_amount(objective) > objective.targetgoal
-        errors.add(:progress, "can't be greater than target goal")
+        errors.add(:amount, "can't be greater than target goal")
       end
     end
   end

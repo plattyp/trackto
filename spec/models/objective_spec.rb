@@ -14,6 +14,11 @@ RSpec.describe Objective, :type => :model do
         expect(objective.save).to eq true
       end
 
+      it 'does not allow if targetdate less than today' do
+        objective = build(:objective, targetdate: Time.now - 1.day)
+        expect(objective.save).to eq false
+      end
+
       it 'does not allow if targetgoal is equal to 0' do
         objective = build(:objective, targetgoal: 0)
         expect(objective.save).to eq false

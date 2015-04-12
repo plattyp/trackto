@@ -4,6 +4,7 @@ class Objective < ActiveRecord::Base
   validates :name, length: { in: 1..250 }
   validates :description, length: { maximum: 500 }
   validates :targetgoal, numericality: { only_integer: true, greater_than: 0}
+  validate :target_date_greater_than_today, on: :create
 
   scope :recent_objectives, -> { order('objectives.created_at DESC') }
 
@@ -34,6 +35,13 @@ class Objective < ActiveRecord::Base
   end
 
   private
+
+  def target_date_greater_than_today
+    return if targetdate.blank?
+    if (Time.zone.now - targetdate.to_datetime) > 0
+      errors.add(:targetdate, "must be greater than or equal to #{Date.today}")
+    end
+  end
 
   def days_difference
     (Time.zone.now - created_at.to_datetime).to_i / 1.day
