@@ -15,6 +15,18 @@ RSpec.describe Progress, :type => :model do
         expect(progress.save).to eq false
       end
 
+      it 'allows to save if the new progress total for the objective is less than the target goal' do
+        objective = create(:objective, targetgoal: 100)
+        progress = build(:progress, amount: 99, objective: objective)
+        expect(progress.save).to eq true       
+      end
+
+      it 'does not allow to save if the new progress total for the objective will be greater than the target goal' do
+        objective = create(:objective, targetgoal: 100)
+        progress = build(:progress, amount: 101, objective: objective)
+        expect(progress.save).to eq false
+      end
+
       context 'objective' do
         before(:all) do
           Objective.delete_all

@@ -3,14 +3,14 @@ class Objective < ActiveRecord::Base
 
   validates :name, length: { in: 1..250 }
   validates :description, length: { maximum: 500 }
-  validates :targetgoal, numericality: { only_integer: true }
+  validates :targetgoal, numericality: { only_integer: true, greater_than: 0}
 
   scope :recent_objectives, -> { order('objectives.created_at DESC') }
 
   def self.recent_objectives_with_progress
     objectives = []
     Objective.recent_objectives.each do |p|
-      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s}
+      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s}
     end
     objectives
   end
@@ -27,6 +27,10 @@ class Objective < ActiveRecord::Base
 
   def target_date
     targetdate || "9999-12-31".to_date
+  end
+
+  def progress_pct
+    (progress.to_f / targetgoal.to_f).round(2)
   end
 
   private

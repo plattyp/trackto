@@ -13,11 +13,18 @@ RSpec.describe Objective, :type => :model do
         objective.name = Faker::Lorem.characters(249)
         expect(objective.save).to eq true
       end
+
+      it 'does not allow if targetgoal is equal to 0' do
+        objective = build(:objective, targetgoal: 0)
+        expect(objective.save).to eq false
+      end
+
       it 'does not allow to save if name is 0 characters' do
         objective = build(:objective)
         objective.name = Faker::Lorem.characters(0)
         expect(objective.save).to eq false
       end
+
       it 'does not allow to save if name is greater than or equal to 250 characters' do
         objective = build(:objective)
         objective.name = Faker::Lorem.characters(251)
@@ -99,6 +106,24 @@ RSpec.describe Objective, :type => :model do
       pace = objective.progress / 5.0
       expect(objective.pace).to eq pace.round(2)
     end
+
+    it 'returns 0 if there has been no progress' do
+      objective = create(:objective)
+      expect(objective.pace).to eq 0
+    end
+  end
+
+  describe 'progress_pct' do
+    it 'returns a float with the results from (total progress / target goal)' do
+      objective = create(:objective, targetgoal: 100)
+      progress  = create(:progress, amount: 40, objective: objective)
+      expect(objective.progress_pct).to eq 0.40
+    end
+
+    it 'returns 0 if there is no progress on an objective' do
+      objective = create(:objective, targetgoal: 100)
+      expect(objective.progress_pct).to eq 0
+    end
   end
 
   describe '#recent_objectives_with_progress' do
@@ -112,15 +137,15 @@ RSpec.describe Objective, :type => :model do
 
     it 'returns an array of 1 hash if 1 objective is available' do
       o = create(:objective)
-      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: o.target_date, progress: o.progress, pace: o.pace, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
+      expect(described_class.recent_objectives_with_progress).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: o.target_date, progress: o.progress, pace: o.pace, progress_pct: o.progress_pct, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
     end
 
     it 'returns an array of 2 hashes in most recent order if 2 objectives are available' do
       o = create(:objective)
       p = create(:objective)
       expect(described_class.recent_objectives_with_progress).to eq [
-        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
-        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: p.target_date, progress: o.progress, pace: o.pace, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
+        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
+        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: p.target_date, progress: o.progress, pace: o.pace, progress_pct: o.progress_pct, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
       ]
     end
   end

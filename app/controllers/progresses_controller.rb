@@ -22,7 +22,7 @@ class ProgressesController < ApplicationController
         format.html { redirect_to objective_path(@objective), notice: 'Progress was created successfully!' }
         format.json { render json: @progress.to_json, status: 200 }
       else
-        format.html { redirect_to new_objective_progress_path(@objective), notice: 'Progress was unable to be created' }
+        format.html { render :new }
         format.json { render json: @progress.errors.to_json, status: :unprocessable_entity }
       end
     end

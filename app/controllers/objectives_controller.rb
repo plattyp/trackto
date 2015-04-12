@@ -32,7 +32,7 @@ class ObjectivesController < ApplicationController
         format.html { redirect_to objectives_path, notice: 'Objective was successfully created!' }
         format.json { render json: @objective.to_json, status: 200 }
       else
-        format.html { redirect_to new_objective_path, notice: 'Objective was unable to be created' }
+        format.html { render :new }
         format.json { render json: @objective.errors.to_json, status: :unprocessable_entity }
       end
     end

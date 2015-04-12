@@ -71,9 +71,9 @@ RSpec.describe ProgressesController, :type => :controller do
       expect(response).to redirect_to objective_path(@objective)
     end
 
-    it 'redirects to new objective progress path on failure using html' do
+    it 'renders new template of objective progress path on failure using html' do
       post :create, progress: attributes_for(:progress, amount: nil), objective_id: @objective.id, format: :html
-      expect(response).to redirect_to new_objective_progress_path(@objective)
+      expect(response).to render_template :new
     end
 
     it 'responds with a status of success on success when using json' do

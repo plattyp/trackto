@@ -6,9 +6,10 @@
     "name": "<%= o[:name] %>",
     "description": "<%= o[:description] %>",
     "targetgoal": <%= o[:targetgoal] %>,
-    "targetdate": <%= o[:targetdate] %>,
+    "targetdate": "<%= o[:targetdate] %>",
     "progress": <%= o[:progress] %>,
     "pace": <%= o[:pace] %>,
+    "progress_pct": <%= o[:progress_pct] %>,
     "created_at": "<%= o[:created_at] %>",
     "updated_at": "<%= o[:updated_at] %>"
   }<%= ',' unless @objectives.last == o %>

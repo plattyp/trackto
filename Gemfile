@@ -42,7 +42,7 @@ end
 # For Application Server
 gem 'foreman'
 gem 'puma'
-gem 'rack-timeout',  '~> 0.2.4'
+#gem 'rack-timeout',  '~> 0.2.4'
 
 # For Heroku
 gem 'rails_12factor', group: :production
