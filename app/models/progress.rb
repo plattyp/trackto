@@ -15,6 +15,14 @@ class Progress < ActiveRecord::Base
     progress
   end
 
+  def self.all_progress
+    progress = []
+    Progress.all.each do |p|
+      progress << {id: p.id, amount: p.amount, objective_id: p.objective_id, updated_at: p.updated_at.to_s}
+    end
+    return progress
+  end
+
   def new_progress_total_cannot_be_greater_then_objective_goal
     objective = Objective.find_by_id(objective_id)
     if objective

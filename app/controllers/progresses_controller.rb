@@ -1,5 +1,13 @@
 class ProgressesController < ApplicationController
-  before_filter :find_objective
+  before_filter :find_objective, except: :all_progress
+
+  def all_progress
+    @progresses = Progress.all_progress
+
+    respond_to do |format|
+      format.json { render json: @progresses.to_json }
+    end
+  end
 
   def index
     @progresses = Progress.progress_history(@objective)

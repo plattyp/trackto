@@ -2,6 +2,29 @@ require 'rails_helper'
 
 RSpec.describe ProgressesController, :type => :controller do
 
+  describe 'GET all_progress' do
+    before(:each) do
+      Progress.delete_all
+    end
+
+    it 'assigns an empty array to @progresses if there is no progress associated with any objectives' do
+      get :all_progress, format: :json
+      expect(assigns(:progresses)).to eq []
+    end
+
+    it 'assigns an array to @progresses if there is any progress associated with any objectives' do
+      objective = create(:objective)
+      progress1 = create(:progress, objective: objective)
+      progress2 = create(:progress, objective: objective)
+
+      get :all_progress, format: :json
+      expect(assigns(:progresses)).to eq [
+        {id: progress1.id, amount: progress1.amount, objective_id: progress1.objective_id, updated_at: progress1.updated_at.to_s},
+        {id: progress2.id, amount: progress2.amount, objective_id: progress2.objective_id, updated_at: progress2.updated_at.to_s}
+      ]
+    end
+  end
+
   describe 'GET index' do
     before(:each) do
       @objective = create(:objective)
