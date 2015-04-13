@@ -31,7 +31,7 @@ class Objective < ActiveRecord::Base
   end
 
   def progress_pct
-    (progress.to_f / targetgoal.to_f).round(2)
+    (progress.to_f / targetgoal.to_f).round(2) * 100
   end
 
   private

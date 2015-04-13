@@ -122,7 +122,7 @@ RSpec.describe Objective, :type => :model do
     it 'returns a float with the results from (total progress / target goal)' do
       objective = create(:objective, targetgoal: 100)
       progress  = create(:progress, amount: 40, objective: objective)
-      expect(objective.progress_pct).to eq 0.40
+      expect(objective.progress_pct).to eq 40.0
     end
 
     it 'returns 0 if there is no progress on an objective' do
