@@ -5,7 +5,7 @@ class ProgressesController < ApplicationController
     @progresses = Progress.all_progress
 
     respond_to do |format|
-      format.json { render json: @progresses.to_json }
+      format.json { render 'progresses/json/all_progress.json.erb', status: 200, content_type: 'application/json' }
     end
   end
 
