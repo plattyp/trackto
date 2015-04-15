@@ -118,6 +118,19 @@ RSpec.describe Objective, :type => :model do
     end
   end
 
+  describe 'most_updated_at' do
+    it 'returns the updated_at date from itself if there is no progress' do
+      objective = create(:objective)
+      expect(objective.most_updated_at).to eq objective.updated_at
+    end
+
+    it 'returns the latest progress updated_at date if it is greater than the current updated_at date' do
+      objective = create(:objective)
+      progress  = create(:progress, objective: objective)
+      expect(objective.most_updated_at).to eq progress.updated_at
+    end
+  end
+
   describe 'progress_pct' do
     it 'returns a float with the results from (total progress / target goal)' do
       objective = create(:objective, targetgoal: 100)

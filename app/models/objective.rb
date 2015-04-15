@@ -11,7 +11,7 @@ class Objective < ActiveRecord::Base
   def self.recent_objectives_with_progress
     objectives = []
     Objective.recent_objectives.each do |p|
-      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s}
+      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, created_at: p.created_at.to_s, updated_at: p.most_updated_at.to_s}
     end
     objectives
   end
@@ -34,7 +34,23 @@ class Objective < ActiveRecord::Base
     (progress.to_f / targetgoal.to_f).round(2) * 100
   end
 
+  def most_updated_at
+    if has_progress?
+      most_recent_progress > updated_at ? most_recent_progress : updated_at
+    else
+      updated_at
+    end
+  end
+
   private
+
+  def most_recent_progress
+    progresses.maximum(:updated_at).to_datetime if has_progress?
+  end
+
+  def has_progress?
+    progress > 0
+  end
 
   def target_date_greater_than_today
     return if targetdate.blank?
