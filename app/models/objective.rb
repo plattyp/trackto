@@ -45,7 +45,7 @@ class Objective < ActiveRecord::Base
   private
 
   def most_recent_progress
-    progresses.maximum(:updated_at).to_datetime if has_progress?
+    progresses.maximum(:updated_at) if has_progress?
   end
 
   def has_progress?
