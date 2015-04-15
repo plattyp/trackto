@@ -33,7 +33,7 @@ class ProgressesController < ApplicationController
         format.json { render json: @progress.to_json, status: 200 }
       else
         format.html { render :new }
-        format.json { render 'layouts/json/errors.json.erb', status: :unprocessable_entity }
+        format.json { @messages = @progress.errors, render 'layouts/json/errors.json.erb', status: :unprocessable_entity }
       end
     end
   end

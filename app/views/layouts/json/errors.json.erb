@@ -1,2 +1,6 @@
-{"error": [@progress.errors.to_json]
+{"errors": [
+  <% @messages.errors.full_messages.each do |msg| %>
+    <%= msg %><%= ',' unless @messages.errors.full_messages.last == msg %>
+  <% end %>
+]
 }
