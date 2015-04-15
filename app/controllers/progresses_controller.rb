@@ -32,8 +32,9 @@ class ProgressesController < ApplicationController
         format.html { redirect_to objective_path(@objective), notice: 'Progress was created successfully!' }
         format.json { render json: @progress.to_json, status: 200 }
       else
+        @messages = @progress
         format.html { render :new }
-        format.json { @messages = @progress.errors, render 'layouts/json/errors.json.erb', status: :unprocessable_entity }
+        format.json { render 'layouts/json/errors.json.erb', status: :unprocessable_entity }
       end
     end
   end
