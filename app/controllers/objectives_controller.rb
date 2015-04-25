@@ -12,12 +12,18 @@ class ObjectivesController < ApplicationController
   end
 
   def show
-    @objective = Objective.find(params[:id])
-    @progress = Progress.progress_history(@objective)
+    @objective = Objective.find_by_id(params[:id])
 
     respond_to do |format|
-      format.html
-      format.json { render 'objectives/json/show.json.erb', status: 200, content_type: 'application/json' }
+      if !@objective.nil?
+        @progress = Progress.progress_history(@objective)
+
+        format.html
+        format.json { render 'objectives/json/show.json.erb', status: 200, content_type: 'application/json' }
+      else
+        format.html { redirect_to objectives_path, alert: 'Objective does not exist' }
+        format.json { render json: {"errors": ["Objective does not exist"]}, status: 404, content_type: 'application/json' }
+      end
     end
   end
 

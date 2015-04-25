@@ -66,6 +66,18 @@ RSpec.describe ObjectivesController, :type => :controller do
       get :show, id: @objective, format: :json
       expect(response).to render_template 'objectives/json/show.json.erb'      
     end
+
+    it 'renders a 404 status if the objective does not exist when using json' do
+      get :show, id: '-1', format: :json
+      expect(response).to have_http_status(404)
+    end
+
+    it 'renders errors in json when using json' do
+      get :show, id: '-1', format: :json
+
+      jsonerrors = JSON.parse(response.body)
+      expect(jsonerrors["errors"].count).to eq 1
+    end
   end
 
   describe 'GET new' do
