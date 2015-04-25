@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ObjectivesController, :type => :controller do
+  login_user
 
   describe 'GET index' do 
     before(:all) do

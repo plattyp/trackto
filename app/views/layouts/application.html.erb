@@ -8,6 +8,15 @@
 </head>
 <body>
 
+<%= render partial: 'layouts/common/navigation' %>
+
+<% if notice %>
+  <p class="alert alert-success"><%= notice %></p>
+<% end %>
+<% if alert %>
+  <p class="alert alert-danger"><%= alert %></p>
+<% end %>
+
 <%= yield %>
 
 </body>

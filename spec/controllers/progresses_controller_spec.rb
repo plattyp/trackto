@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ProgressesController, :type => :controller do
+  login_user
 
   describe 'GET all_progress' do
     before(:each) do

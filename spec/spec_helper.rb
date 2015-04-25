@@ -12,6 +12,8 @@
 #
 # The `.rspec` file also contains a few flags that are not defaults but that
 # users commonly want.
+require 'devise'
+require_relative 'support/controller_macros'
 
 require 'factory_girl'
 
@@ -23,6 +25,10 @@ RSpec.configure do |config|
   # assertions if you prefer.
 
   config.include FactoryGirl::Syntax::Methods
+
+  # For Devise Authentication
+  config.include Devise::TestHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
 
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`

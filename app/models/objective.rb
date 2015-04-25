@@ -1,4 +1,5 @@
 class Objective < ActiveRecord::Base
+  belongs_to :user
   has_many :progresses, :dependent => :destroy
 
   validates :name, length: { in: 1..250 }
