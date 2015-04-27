@@ -76,7 +76,7 @@ RSpec.describe ObjectivesController, :type => :controller do
       get :show, id: '-1', format: :json
 
       jsonerrors = JSON.parse(response.body)
-      expect(jsonerrors["errors"].count).to eq 1
+      expect(jsonerrors["error"]).to eq 'Objective does not exist'
     end
   end
 

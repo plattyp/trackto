@@ -142,6 +142,10 @@ Devise.setup do |config|
   # Range for password length.
   config.password_length = 8..128
 
+  config.warden do |manager|
+    manager.failure_app = CustomFailure
+  end
+
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly
   # to give user feedback and not to assert the e-mail validity.

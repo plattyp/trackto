@@ -1,4 +1,4 @@
-class ObjectivesController < ApplicationController
+class ObjectivesController < ApiController
   #Used temporarily until authentication is put into place
   skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
 
@@ -22,7 +22,7 @@ class ObjectivesController < ApplicationController
         format.json { render 'objectives/json/show.json.erb', status: 200, content_type: 'application/json' }
       else
         format.html { redirect_to objectives_path, alert: 'Objective does not exist' }
-        format.json { render json: {"errors": ["Objective does not exist"]}, status: 404, content_type: 'application/json' }
+        format.json { render json: {"error": "Objective does not exist"}, status: 404, content_type: 'application/json' }
       end
     end
   end

@@ -14,6 +14,7 @@
 # users commonly want.
 require 'devise'
 require_relative 'support/controller_macros'
+require_relative 'support/registration_helpers'
 
 require 'factory_girl'
 
@@ -28,6 +29,7 @@ RSpec.configure do |config|
 
   # For Devise Authentication
   config.include Devise::TestHelpers, :type => :controller
+  config.include RegistrationHelpers, :type => :controller
   config.extend ControllerMacros, :type => :controller
 
   config.expect_with :rspec do |expectations|

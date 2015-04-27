@@ -6,4 +6,8 @@ module ControllerMacros
       sign_in user
     end
   end
+
+  def login_specific_user(user)
+    sign_in user
+  end
 end
