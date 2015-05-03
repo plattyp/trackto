@@ -11,7 +11,7 @@ class SessionsController < Devise::SessionsController
   def create
     warden.authenticate!(:scope => resource_name)
     @user = current_user
-    
+
     if @user
       if @user.valid_password? params[:user][:password]
         respond_to do |format|
@@ -26,7 +26,7 @@ class SessionsController < Devise::SessionsController
         respond_to do |format|
           format.json {
             render json: {
-              message:    'Invalid password or email'
+              error:    'Invalid password or email'
             }, status: HTTP_UNAUTHORIZED
           }
         end
@@ -35,7 +35,7 @@ class SessionsController < Devise::SessionsController
       respond_to do |format|
         format.json {
           render json: {
-            message:    'Invalid password or email'
+            error:    'Invalid password or email'
           }, status: HTTP_UNAUTHORIZED
         }
       end
