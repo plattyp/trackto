@@ -33,6 +33,10 @@ class ObjectivesController < ApiController
 
   def create
     @objective = Objective.new(objective_params)
+
+    #Associate the user with the objective
+    @objective.user_id = current_user.id
+
     respond_to do |format|
       if @objective.save
         format.html { redirect_to objectives_path, notice: 'Objective was successfully created!' }
