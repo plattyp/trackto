@@ -3,6 +3,8 @@ class SessionsController < Devise::SessionsController
   skip_before_filter :verify_authenticity_token, if: :json_request?
 
   acts_as_token_authentication_handler_for User, only: [:destroy], fallback_to_devise: false
+  skip_before_filter :verify_signed_out_user, only: :destroy
+
   skip_before_filter :authenticate_entity_from_token!
   skip_before_filter :authenticate_entity!
 
