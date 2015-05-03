@@ -15,7 +15,7 @@ FactoryGirl.define do
     end
 
     factory :objective_with_targetdate do
-      targetdate "2015-05-03".to_date
+      targetdate Faker::Date.forward(10)
     end
   end
 
