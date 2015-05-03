@@ -50,7 +50,11 @@ class ObjectivesController < ApiController
 
   def destroy
     @objective = Objective.find(params[:id])
-    @objective.destroy
+
+    #A user should only be able delete their own objectives
+    if @objective.user_id == current_user.id
+      @objective.destroy
+    end
 
     respond_to do |format|
       if @objective.destroyed?
