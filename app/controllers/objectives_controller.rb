@@ -3,7 +3,7 @@ class ObjectivesController < ApiController
   skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
 
   def index
-    @objectives = Objective.recent_objectives_with_progress
+    @objectives = Objective.objectives_with_progress(current_user)
 
     respond_to do |format|
       format.html
