@@ -9,13 +9,32 @@ class SessionsController < Devise::SessionsController
   skip_before_filter :authenticate_entity!
 
   def create
-    warden.authenticate!(:scope => resource_name)
-    @user = current_user
+    #warden.authenticate!(:scope => resource_name)
+    email = params[:user][:email] if params[:user]
+    password = params[:user][:password] if params[:user]
+ 
+    id = User.find_by(email: email).try(:id) if email.presence
+    
+    if email.nil? or password.nil?
+      respond_to do |format|
+        format.json {
+          render json: {
+            error:    'Invalid password or email'
+          }, status: HTTP_UNAUTHORIZED
+        }
+      end
+    end
+
+    # Authentication
+    @user = User.find_by(email: email)
+
+    #@user = current_user
 
     puts "Current User Authenticated #{current_user.email}"
 
     if @user
       if @user.valid_password? params[:user][:password]
+        @user.reset_authentication_token!
         respond_to do |format|
           format.json {
             render json: {
