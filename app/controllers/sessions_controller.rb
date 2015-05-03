@@ -12,6 +12,8 @@ class SessionsController < Devise::SessionsController
     warden.authenticate!(:scope => resource_name)
     @user = current_user
 
+    puts "Current User Authenticated #{current_user.email}"
+
     if @user
       if @user.valid_password? params[:user][:password]
         respond_to do |format|
