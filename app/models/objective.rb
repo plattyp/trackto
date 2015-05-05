@@ -9,14 +9,6 @@ class Objective < ActiveRecord::Base
 
   scope :recent_objectives, -> { order('objectives.created_at DESC') }
 
-  def self.recent_objectives_with_progress
-    objectives = []
-    Objective.recent_objectives.each do |p|
-      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, created_at: p.created_at.to_s, updated_at: p.most_updated_at.to_s}
-    end
-    objectives
-  end
-
   def self.objectives_with_progress(user)
     objectives = []
     user.objectives.recent_objectives.each do |p|

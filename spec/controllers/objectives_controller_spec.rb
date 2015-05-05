@@ -4,17 +4,16 @@ RSpec.describe ObjectivesController, :type => :controller do
   login_user
 
   describe 'GET index' do 
-    before(:all) do
+    before(:each) do
       Objective.delete_all
-      @objectiveone = create(:objective)
-      @objectivetwo = create(:objective)
+      @objectiveone = create(:objective, user: subject.current_user)
+      @objectivetwo = create(:objective, user: subject.current_user)
       @objectivethree = create(:objective)
     end
 
-    it 'loads an array of objective hashes by most recently created' do
+    it 'loads an array of objective hashes by most recently created for the current user' do
       get :index
       expect(assigns(:objectives)).to eq [
-        {id: @objectivethree.id, name: @objectivethree.name, description: @objectivethree.description, targetgoal: @objectivethree.targetgoal, targetdate: @objectivethree.target_date, progress: @objectivethree.progress, pace: @objectivethree.pace, progress_pct: @objectivethree.progress_pct, created_at: @objectivethree.created_at.to_s, updated_at: @objectivethree.updated_at.to_s},
         {id: @objectivetwo.id, name: @objectivetwo.name, description: @objectivetwo.description, targetgoal: @objectivetwo.targetgoal, targetdate: @objectivetwo.target_date, progress: @objectivetwo.progress, pace: @objectivetwo.pace, progress_pct: @objectivetwo.progress_pct, created_at: @objectivetwo.created_at.to_s, updated_at: @objectivetwo.updated_at.to_s},
         {id: @objectiveone.id, name: @objectiveone.name, description: @objectiveone.description, targetgoal: @objectiveone.targetgoal, targetdate: @objectiveone.target_date, progress: @objectiveone.progress, pace: @objectiveone.pace, progress_pct: @objectiveone.progress_pct, created_at: @objectiveone.created_at.to_s, updated_at: @objectiveone.updated_at.to_s} 
       ]
@@ -122,7 +121,7 @@ RSpec.describe ObjectivesController, :type => :controller do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @objective = create(:objective, :with_progress)
+      @objective = create(:objective, :with_progress, user: subject.current_user)
     end
 
     it 'deletes an objective' do
@@ -138,14 +137,21 @@ RSpec.describe ObjectivesController, :type => :controller do
       expect{delete :destroy, id: @objective}.to change{Progress.where(id: progressids).count}.to(0)
     end
 
+    it 'does not delete an objective if it belongs to another user' do 
+      another_user = create(:user)
+      objective    = create(:objective, user: another_user)
+
+      expect{delete :destroy, id: objective}.to change{Objective.all.count}.by(0)
+    end
+
     it 'redirects to objectives path on success when using html' do
       delete :destroy, id: @objective, format: :html
       expect(response).to redirect_to objectives_path
     end
 
-    it 'responds with a an @objective object in json when using json' do
+    it 'responds with an @objective object in json when using json with the same ID' do
       delete :destroy, id: @objective, format: :json
-      expect(response.body).to eq @objective.to_json
+      expect(JSON.parse(response.body)["id"]).to eq @objective.id
     end
 
     it 'responds with a success status on success when using json' do

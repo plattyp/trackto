@@ -4,6 +4,7 @@ FactoryGirl.define do
     description "MyText"
     targetgoal 100
     targetdate ""
+    user
 
 
     trait :with_progress do

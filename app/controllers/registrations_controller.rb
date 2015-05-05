@@ -11,21 +11,37 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
     build_resource(sign_up_params)
-    if resource.save
-      status = HTTP_OK
-      message = "Successfully created new account for email #{sign_up_params[:email]}."
+
+    if User.find_by(email: resource.email)
+      status = HTTP_UNAUTHORIZED
+      error = "The email address used already exists"
     else
-      clean_up_passwords resource
-      status = HTTP_INTERNAL_SERVER_ERROR
-      message = "Failed to create new account for email #{sign_up_params[:email]}."
+      if resource.save
+        status = HTTP_OK
+        message = "Successfully created new account for email #{sign_up_params[:email]}."
+      else
+        clean_up_passwords resource
+        status = HTTP_UNAUTHORIZED
+        error = "Failed to create new account for email #{sign_up_params[:email]}."
+      end
     end
 
-    respond_to do |format|
-      format.json {
-        render json: {
-          message: message
-        }, status: status
-      }
+    if message
+      respond_to do |format|
+        format.json {
+          render json: {
+            message: message
+          }, status: status
+        }
+      end
+    else
+      respond_to do |format|
+        format.json {
+          render json: {
+            error: error
+          }, status: status
+        }
+      end
     end
   end
 
