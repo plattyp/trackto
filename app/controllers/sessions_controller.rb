@@ -11,8 +11,6 @@ class SessionsController < Devise::SessionsController
   def create
     email = params[:user][:email] if params[:user]
     password = params[:user][:password] if params[:user]
- 
-    id = User.where(email: email).try(:id) if email.presence
     
     if email.nil? or password.nil?
       respond_to do |format|
@@ -24,8 +22,10 @@ class SessionsController < Devise::SessionsController
       end
     end
 
+    id = User.find_by(email: email).try(:id) if email.presence
+
     # Authentication
-    @user = User.where(email: email)
+    @user = User.find_by(email: email)
 
     puts "Current User Authenticated #{current_user.email}"
 
