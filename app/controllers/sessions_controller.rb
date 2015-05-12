@@ -9,11 +9,10 @@ class SessionsController < Devise::SessionsController
   skip_before_filter :authenticate_entity!
 
   def create
-    #warden.authenticate!(:scope => resource_name)
     email = params[:user][:email] if params[:user]
     password = params[:user][:password] if params[:user]
  
-    id = User.find_by(email: email).try(:id) if email.presence
+    id = User.where(email: email).try(:id) if email.presence
     
     if email.nil? or password.nil?
       respond_to do |format|
@@ -26,9 +25,7 @@ class SessionsController < Devise::SessionsController
     end
 
     # Authentication
-    @user = User.find_by(email: email)
-
-    #@user = current_user
+    @user = User.where(email: email)
 
     puts "Current User Authenticated #{current_user.email}"
 
