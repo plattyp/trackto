@@ -157,7 +157,7 @@ RSpec.describe Objective, :type => :model do
     it 'returns an array of 1 hash if 1 objective is available for the user' do
       user = create(:user)
       o = create(:objective, user: user)
-      expect(described_class.objectives_with_progress(user)).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: o.target_date, progress: o.progress, pace: o.pace, progress_pct: o.progress_pct, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
+      expect(described_class.objectives_with_progress(user)).to eq [{id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: o.target_date, progress: o.progress, pace: o.pace, progress_pct: o.progress_pct, last_progress_on: o.last_progress_on, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }]
     end
 
     it 'returns an array of 2 hashes in most recent order if 2 objectives are available for the user' do
@@ -165,8 +165,8 @@ RSpec.describe Objective, :type => :model do
       o = create(:objective, user: user)
       p = create(:objective, user: user)
       expect(described_class.objectives_with_progress(user)).to eq [
-        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
-        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: p.target_date, progress: o.progress, pace: o.pace, progress_pct: o.progress_pct, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
+        {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, last_progress_on: o.last_progress_on, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s },
+        {id: o.id, name: o.name, description: o.description, targetgoal: o.targetgoal, targetdate: p.target_date, progress: o.progress, pace: o.pace, progress_pct: o.progress_pct, last_progress_on: o.last_progress_on, created_at: o.created_at.to_s, updated_at: o.updated_at.to_s }
       ]
     end
   end

@@ -14,8 +14,8 @@ RSpec.describe ObjectivesController, :type => :controller do
     it 'loads an array of objective hashes by most recently created for the current user' do
       get :index
       expect(assigns(:objectives)).to eq [
-        {id: @objectivetwo.id, name: @objectivetwo.name, description: @objectivetwo.description, targetgoal: @objectivetwo.targetgoal, targetdate: @objectivetwo.target_date, progress: @objectivetwo.progress, pace: @objectivetwo.pace, progress_pct: @objectivetwo.progress_pct, created_at: @objectivetwo.created_at.to_s, updated_at: @objectivetwo.updated_at.to_s},
-        {id: @objectiveone.id, name: @objectiveone.name, description: @objectiveone.description, targetgoal: @objectiveone.targetgoal, targetdate: @objectiveone.target_date, progress: @objectiveone.progress, pace: @objectiveone.pace, progress_pct: @objectiveone.progress_pct, created_at: @objectiveone.created_at.to_s, updated_at: @objectiveone.updated_at.to_s} 
+        {id: @objectivetwo.id, name: @objectivetwo.name, description: @objectivetwo.description, targetgoal: @objectivetwo.targetgoal, targetdate: @objectivetwo.target_date, progress: @objectivetwo.progress, pace: @objectivetwo.pace, progress_pct: @objectivetwo.progress_pct, last_progress_on: @objectivetwo.last_progress_on, created_at: @objectivetwo.created_at.to_s, updated_at: @objectivetwo.updated_at.to_s},
+        {id: @objectiveone.id, name: @objectiveone.name, description: @objectiveone.description, targetgoal: @objectiveone.targetgoal, targetdate: @objectiveone.target_date, progress: @objectiveone.progress, pace: @objectiveone.pace, progress_pct: @objectiveone.progress_pct, last_progress_on: @objectiveone.last_progress_on, created_at: @objectiveone.created_at.to_s, updated_at: @objectiveone.updated_at.to_s} 
       ]
     end
 
