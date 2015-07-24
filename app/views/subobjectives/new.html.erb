@@ -1,0 +1,10 @@
+<h1>Add Subobjective for <%= @objective.name %></h1>
+
+<%= form_for [@objective,@subobjective]  do |f| %>
+  <%= render partial: 'layouts/common/formerrors', locals: {object: @subobjective} %>
+  <%= f.label "Name" %><br />
+  <%= f.text_field :name %><br />
+  <%= f.label "Description" %><br />
+  <%= f.text_field :description %><br /><br />
+  <%= f.submit %>
+<% end %>

@@ -1,7 +1,7 @@
 class ProgressesController < ApiController
   #Used temporarily until authentication is put into place
   skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
-  before_filter :find_objective, except: :all_progress
+  before_filter :find_context, except: :all_progress
 
   def all_progress
     @progresses = Progress.all_progress
@@ -21,15 +21,17 @@ class ProgressesController < ApiController
   end
 
   def new
-    @progress = @objective.progresses.build
+    @context = find_context
+    @progress = @context.progresses.new
   end
 
   def create
-    @progress = @objective.progresses.build(progress_params)
+    @context = find_context
+    @progress = @context.progresses.new(progress_params)
     
     respond_to do |format|
       if @progress.save
-        format.html { redirect_to objective_path(@objective), notice: 'Progress was created successfully!' }
+        format.html { redirect_to context_path, notice: 'Progress was created successfully!' }
         format.json { render json: @progress.to_json, status: 200 }
       else
         @messages = @progress
@@ -41,11 +43,26 @@ class ProgressesController < ApiController
 
   private
 
-  def find_objective
-    @objective = Objective.find(params[:objective_id])
+  def progress_params
+    params.require(:progress).permit!
   end
 
-  def progress_params
-    params.require(:progress).permit(:amount, :objective_id)
+  def find_context
+    if params[:objective_id]
+      id = params[:objective_id]
+      Objective.find(params[:objective_id])
+    else
+      id = params[:subobjective_id]
+      Subobjective.find(params[:subobjective_id])
+    end
   end
+
+  def context_path
+    if params[:objective_id]
+      objective_path(params[:objective_id])
+    else
+      objective_path(Subobjective.find(params[:subobjective_id]).objective_id)
+    end
+  end
+
 end

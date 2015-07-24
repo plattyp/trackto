@@ -1,0 +1,57 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+      <div class="col-lg-12">
+        <div class="wizard-big wizard clearfix">
+          <div class="ibox">
+              <div class="ibox-title">
+                  <h5>Create a New Objective</h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                          <i class="fa fa-wrench"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-user">
+                          <li><a href="#">Config option 1</a>
+                          </li>
+                          <li><a href="#">Config option 2</a>
+                          </li>
+                      </ul>
+                      <a class="close-link">
+                          <i class="fa fa-times"></i>
+                      </a>
+                  </div>
+              </div>
+              <div class="ibox-content">
+                  <form id="createObjectiveForm" ng-submit="createObjective()" ng-controller="CreateObjectiveController">
+                      <fieldset>
+                          <div class="row">
+                              <div class="col-lg-8">
+                              <span class="error" ng-show="createObjectiveError"></span><br>
+                                  <div class="form-group">
+                                      <label>Name *</label>
+                                      <input id="name" name="name" type="text" ng-model="objective.name" class="form-control required">
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Target Goal*</label>
+                                      <input id="targetGoal" name="targetGoal" type="text" ng-model="objective.targetgoal" class="form-control">
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Description</label>
+                                      <input id="description" name="description" type="text" ng-model="objective.description" class="form-control">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="actions">
+                            <button type="submit" class="btn btn-primary">Create Objective</button>
+                          </div>
+                      </fieldset>
+                  </form>
+              </div>
+          </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

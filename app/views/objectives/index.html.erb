@@ -10,7 +10,7 @@
   </tr>
   <% @objectives.each do |o| %>
   <tr>
-    <td><%= o[:name] %></td>
+    <td><%= link_to(o[:name], objective_path(o[:id])) %></td>
     <td><%= o[:description] %></td>
     <td><%= o[:targetgoal] %></td>
     <td><%= o[:targetdate] %></td>

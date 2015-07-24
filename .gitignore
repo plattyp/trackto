@@ -17,3 +17,7 @@
 
 # Ignore deployment rake tasks
 /lib/tasks/deploy.rake
+
+# Ignore Bower & Grunt Files
+/app/assets/javascripts/angular/bower_components/*
+/app/assets/javascripts/angular/node_modules/*

@@ -13,6 +13,7 @@ class ObjectivesController < ApiController
 
   def show
     @objective = Objective.find_by_id(params[:id])
+    @subobjectives = @objective.get_subobjectives
 
     respond_to do |format|
       if !@objective.nil?

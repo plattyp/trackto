@@ -1,6 +1,7 @@
 class Objective < ActiveRecord::Base
   belongs_to :user
-  has_many :progresses, :dependent => :destroy
+  has_many :progresses, as: :progressable, :dependent => :destroy
+  has_many :subobjectives, :dependent => :destroy
 
   validates :name, length: { in: 1..250 }
   validates :description, length: { maximum: 500 }
@@ -15,6 +16,14 @@ class Objective < ActiveRecord::Base
       objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, last_progress_on: p.last_progress_on, created_at: p.created_at.to_s, updated_at: p.most_updated_at.to_s}
     end
     objectives
+  end
+
+  def get_subobjectives
+    subobjectives = []
+    self.subobjectives.each do |p|
+      subobjectives << {id: p.id, name: p.name, description: p.description, progress: p.progress, created_at: p.created_at.to_s}
+    end
+    subobjectives
   end
 
   def pace
@@ -44,7 +53,7 @@ class Objective < ActiveRecord::Base
   end
 
   def last_progress_on
-    most_recent_progress || "9999-12-31".to_datetime
+    most_recent_progress || Time.zone.local(9999, 12, 31, 01, 01, 01)
   end
 
   private
