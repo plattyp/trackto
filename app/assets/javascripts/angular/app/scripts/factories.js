@@ -53,6 +53,11 @@ function UserFactory($http) {
         return $http.post(urlBase + 'login?' + params);   
     };
 
+    userFactory.registerUser = function(userObj) {
+        var params = 'user[email]=' + userObj.email + '&user[password]=' + userObj.password;
+        return $http.post(urlBase + 'register?' + params);   
+    };
+
     userFactory.logoutUser = function(userObj) {
         return $http.delete(urlBase + 'logout');
     };

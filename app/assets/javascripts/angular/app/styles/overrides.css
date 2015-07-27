@@ -21,7 +21,7 @@
 }
 
 /* Set Custom CSS for Notifications Via Toastr */
-
+/*
 #toast-container > .toast {
     background-image: none !important;
 }
@@ -37,7 +37,7 @@
     padding-right: 0.5em;
     margin-right: 0.5em;
 }
-/*
+
 #toast-container > .toast-warning:before {
     content: "\f003";
 }

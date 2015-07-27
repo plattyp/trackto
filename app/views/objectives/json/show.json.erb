@@ -8,6 +8,7 @@
     "pace": <%= @objective.pace %>,
     "progress_pct": <%= @objective.progress_pct %>,
     "subobjective_count": <%= @subobjectives.size %>,
+    "archived": <%= @objective.is_archived? %>,
     "created_at": "<%= @objective.created_at %>",
     "updated_at": "<%= @objective.updated_at %>"
   },
