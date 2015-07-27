@@ -58,17 +58,27 @@ function ObjectivesNavigationCtrl($scope, ObjectiveFactory) {
     };
 
     $scope.filterByMainMenu = function(objective) {
-        return objective;
+        if (objective.archived === false)
+            return objective;
+
+        return false;
     };
 
     $scope.filterBySecondaryMenu = function(objective) {
-        if ($scope.objectives.mainMenu === true)
+        if (objective.archived === true)
             return objective;
 
         return false;
     };
 
     $scope.showArchivedMenu = function() {
+        var objs = $scope.objectives;
+
+        for (var i in objs) {
+            if (objs[i].archived === true)
+                return true;
+        }
+
         return false;
     };
 
@@ -78,9 +88,14 @@ function ObjectivesNavigationCtrl($scope, ObjectiveFactory) {
 };
 
 function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFactory) {
+    $scope.objective = {};
     $scope.selected_id = $stateParams.objectiveId;
 
     getObjective($scope.selected_id);
+
+    $scope.isArchived = function() {
+        return $scope.objective.archived;
+    }
 
     function getObjective(objectiveId) {
         ObjectiveFactory.getObjective(objectiveId)
@@ -105,6 +120,34 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
             .error(function (error) {
                 if (error) {
                     toastr.error("Unable to load objective", 'error');
+                }
+            });
+    }
+
+    $scope.archiveObjective = function() {
+        var objectiveId = $scope.selected_id
+        ObjectiveFactory.archiveObjective(objectiveId)
+            .success(function (obj) {
+                $scope.$emit('tidyUp');
+                toastr.info("You have successfully archived the objective: " + obj.name, 'Success');
+            })
+            .error(function (error) {
+                if (error) {
+                    toastr.error("Unable to archive the objective", 'error');
+                }
+            });
+    }
+
+    $scope.unarchiveObjective = function() {
+        var objectiveId = $scope.selected_id
+        ObjectiveFactory.unarchiveObjective(objectiveId)
+            .success(function (obj) {
+                $scope.$emit('tidyUp');
+                toastr.info("You have successfully unarchived the objective: " + obj.name, 'Success');
+            })
+            .error(function (error) {
+                if (error) {
+                    toastr.error("Unable to archive the objective", 'error');
                 }
             });
     }
@@ -155,12 +198,60 @@ function CreateObjectiveController($scope, toastr, ObjectiveFactory) {
     };
 };
 
-function ObjectiveProgressChart($scope) {
-  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-  $scope.series = ['Objective Progress'];
-  $scope.data = [
-    [65, 59, 80, 81, 56, 55, 40]
-  ];
+function ObjectiveDashboard($scope, DashboardFactory) {
+    getObjectivesOverview();
+    getProgressOverview();
+    // To support dashboard metrics
+    $scope.objectivesCount = 0;
+    $scope.subobjectivesCount = 0;
+    $scope.progressCount = 0;
+
+    function getObjectivesOverview() {
+        DashboardFactory.getObjectivesOverview()
+            .success(function (data) {
+                $scope.objectivesCount = data['objectivesCount'];
+                $scope.subobjectivesCount = data['subobjectivesCount'];
+                $scope.progressCount = data['progressCount'];
+            })
+            .error(function (error) {
+                $scope.status = 'Unable to load objectives data: ' + error.message;
+            });
+    }
+
+    // To support the progress trend chart
+    $scope.progress = {};
+    $scope.labels = [];
+    $scope.series = ['Objective Progress'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40]
+    ];
+
+    function getProgressOverview() {
+        DashboardFactory.getProgressOverview()
+            .success(function (prg) {
+                $scope.progress = prg['progress'];
+                reloadChartData();
+            })
+            .error(function (error) {
+                $scope.status = 'Unable to load objectives data: ' + error.message;
+            });
+    }
+
+    function reloadChartData() {
+        var progress = $scope.progress;
+        $scope.labels = [];
+        $scope.data = [];
+        var data = [];
+        for (var key in progress) {
+            $scope.labels.push(capitalizeFirstLetter(key));
+            data.push(progress[key]);
+        }
+        $scope.data.push(data);
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 };
 
 angular
@@ -171,4 +262,4 @@ angular
     .controller('ObjectivesTodayCtrl', ['$scope', 'ObjectiveFactory', ObjectivesTodayCtrl])
     .controller('CreateObjectiveController', ['$scope','toastr','ObjectiveFactory', CreateObjectiveController])
     .controller('ObjectiveDetailCtrl',['$scope', '$stateParams', '$window', 'toastr', 'ObjectiveFactory', ObjectiveDetailCtrl])
-    .controller('ObjectiveProgressChart',['$scope', ObjectiveProgressChart])
+    .controller('ObjectiveDashboard',['$scope','DashboardFactory', ObjectiveDashboard])

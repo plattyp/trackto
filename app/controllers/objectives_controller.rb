@@ -68,6 +68,35 @@ class ObjectivesController < ApiController
     end
   end
 
+  def progress_overview
+    respond_to do |format|
+      format.json { render 'objectives/json/progress_overview.json.erb', status: 200, content_type: 'application/json' }
+    end
+  end
+
+  def objectives_overview
+    respond_to do |format|
+      format.json { render 'objectives/json/objectives_overview.json.erb', status: 200, content_type: 'application/json' }
+    end
+  end
+
+  def archive(option = true)
+    @objective = Objective.find(params[:objective_id])
+    @objective.archived = option
+
+    respond_to do |format|
+      if @objective.save
+        format.json { render json: @objective.to_json, status: 200, content_type: 'application/json' }
+      else
+        format.json { render json: @objective.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def unarchive
+    archive(false)
+  end
+
   private
 
   def objective_params

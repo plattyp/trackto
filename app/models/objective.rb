@@ -13,7 +13,7 @@ class Objective < ActiveRecord::Base
   def self.objectives_with_progress(user)
     objectives = []
     user.objectives.recent_objectives.each do |p|
-      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, last_progress_on: p.last_progress_on, created_at: p.created_at.to_s, updated_at: p.most_updated_at.to_s}
+      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, last_progress_on: p.last_progress_on, archived: p.is_archived?, created_at: p.created_at.to_s, updated_at: p.most_updated_at.to_s}
     end
     objectives
   end
@@ -54,6 +54,10 @@ class Objective < ActiveRecord::Base
 
   def last_progress_on
     most_recent_progress || Time.zone.local(9999, 12, 31, 01, 01, 01)
+  end
+
+  def is_archived?
+    archived || false
   end
 
   private

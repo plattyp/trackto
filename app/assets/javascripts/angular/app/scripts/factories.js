@@ -18,8 +18,31 @@ function ObjectiveFactory($http) {
         return $http.delete(urlBase + '/' + objectiveId);
     };
 
+    objectiveFactory.archiveObjective = function(objectiveId) {
+        return $http.post(urlBase + '/' + objectiveId + '/archive');
+    };
+
+    objectiveFactory.unarchiveObjective = function(objectiveId) {
+        return $http.post(urlBase + '/' + objectiveId + '/unarchive');
+    };
+
     return objectiveFactory;
 };
+
+function DashboardFactory($http) {
+    var urlBase = '/api/';
+    dashboardFactory = {};
+
+    dashboardFactory.getProgressOverview = function() {
+        return $http.get(urlBase + 'progress_overview');
+    }
+
+    dashboardFactory.getObjectivesOverview = function() {
+        return $http.get(urlBase + 'objectives_overview');
+    }
+
+    return dashboardFactory;
+}
 
 function UserFactory($http) {
     var urlBase = '/api/';
@@ -41,3 +64,4 @@ angular
     .module('trackto')
     .factory('ObjectiveFactory', ['$http', ObjectiveFactory])
     .factory('UserFactory', ['$http', UserFactory])
+    .factory('DashboardFactory', ['$http', DashboardFactory])

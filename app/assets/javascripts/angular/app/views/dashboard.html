@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content" ng-controller="ObjectiveDashboard" >
     <div class="row">
         <div class="col-lg-4">
             <div class="ibox float-e-margins">
@@ -7,9 +7,8 @@
                     <h5>Objectives</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">6</h1>
+                    <h1 class="no-margins">{{objectivesCount}}</h1>
 
-                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
                     <small>Objectives</small>
                 </div>
             </div>
@@ -21,9 +20,8 @@
                     <h5>Subobjectives</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">10</h1>
+                    <h1 class="no-margins">{{subobjectivesCount}}</h1>
 
-                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
                     <small>Subobjectives</small>
                 </div>
             </div>
@@ -35,16 +33,15 @@
                     <h5>Progress</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">1425</h1>
+                    <h1 class="no-margins">{{progressCount}}</h1>
 
-                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
                     <small>Progress made</small>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6" ng-controller="ObjectiveProgressChart" >
+        <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div>
@@ -61,7 +58,7 @@
         <div class="col-lg-6" ng-controller="ObjectivesTodayCtrl">
             <div class="ibox-content">
                 <h2>Subobjectives Today</h2>
-                <small>A list of your subobjectives that have not been progressed today. </small>
+                <small>A list of your subobjectives that you have not made progress on today </small>
                 <ul class="todo-list m-t">
                     <li ng-attr-id="{{'today-row-' + $index}}" ng-repeat="objective in objectives">
                         <span class="m-l-xs">{{objective.name}}
