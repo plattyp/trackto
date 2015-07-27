@@ -7,6 +7,7 @@
     "targetdate": "<%= @objective.targetdate %>",
     "pace": <%= @objective.pace %>,
     "progress_pct": <%= @objective.progress_pct %>,
+    "subobjective_count": <%= @subobjectives.size %>,
     "created_at": "<%= @objective.created_at %>",
     "updated_at": "<%= @objective.updated_at %>"
   },
@@ -20,8 +21,8 @@
         "progress": <%= s[:progress] %>
       }
     <% end %>
-  ]
-  "progress:":
+  ],
+  "progress":
   [
     <% @progress.each do |p| %>
       {

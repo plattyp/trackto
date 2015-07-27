@@ -2,7 +2,7 @@
     <div class="sidebar-collapse">
         <ul side-navigation class="nav" id="side-menu">
             <li class="nav-header">
-                <div class="logo-element">
+                <div class="logo" ng-controller="MainCtrl as main">
                     <img ng-src="{{ main.logo }}" class="img-responsive"/>
                 </div>
             </li>
@@ -12,13 +12,13 @@
             <li ui-sref-active="active">
                 <a href="index.dashboard"><i class="fa fa-sliders"></i> <span class="nav-label">Objectives</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('dashboards')}">
-                    <li ui-sref-active="active" ng-repeat="objective in ObjNavCtrl.objectives | filter:filterByMainMenu">
+                    <li ui-sref-active="active" ng-repeat="objective in objectives | filter:filterByMainMenu">
                         <a ui-sref="index.objective({objectiveId: objective.id})">{{objective.name}}</a>
                     </li>
-                    <li>
-                        <a href="">More Objectives<span class="fa arrow"></span></a>
+                    <li ng-show="showArchivedMenu()">
+                        <a href="">Archived Objectives<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
-                            <li ng-repeat="objective in ObjNavCtrl.objectives | filter:filterBySecondaryMenu" >
+                            <li ng-repeat="objective in objectives | filter:filterBySecondaryMenu" >
                                 <a ui-sref="index.objective({objectiveId: objective.id})">{{objective.name}}</a>
                             </li>
                         </ul>

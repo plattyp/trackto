@@ -26,18 +26,20 @@
     <!-- endbuild -->
 
     <!-- build:css({.tmp,app}) styles/style.css -->
+    <link href="styles/overrides.css" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet">
     <!-- endbuild -->
 
     <link href="bower_components/jquery-steps/demo/css/jquery.steps.css" rel='stylesheet' type='text/css'>
-    <link href="bower_components/angularjs-toaster/toaster.min.css" rel='stylesheet' type='text/css'>
+    <link href="bower_components/angular-toastr/dist/angular-toastr.min.css" rel='stylesheet' type='text/css'>
+    <link href="bower_components/angular-chart.js/dist/angular-chart.css" rel='stylesheet' type='text/css'>
 
 </head>
 
 <!-- ControllerAs syntax -->
 <!-- Main controller with serveral data used in Inspinia theme on diferent view -->
 <body ng-controller="MainCtrl as main" class="skin-3">
-<toaster-container></toaster-container>
+
 <!-- Main view  -->
 <div ui-view></div>
 
@@ -66,7 +68,9 @@
 <!-- <script src="scripts/plugins/angular-idle/angular-idle.js"></script> -->
 
 <script src="bower_components/jquery-steps/build/jquery.steps.min.js"></script>
-<script src="bower_components/angularjs-toaster/toaster.min.js"></script>
+<script src="bower_components/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
+<script src="bower_components/Chart.js/Chart.min.js"></script>
+<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <!-- Custom and plugin javascript -->

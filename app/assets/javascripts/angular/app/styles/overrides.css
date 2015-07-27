@@ -1,0 +1,52 @@
+/* For Logo */
+.skin-3 .nav-header {
+    padding: 12px 25px 13px 25px !important;
+}
+
+.logo {
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    color:white;
+    display:block;
+    padding:0px 0px
+}
+
+.task-actions {
+    transform: translateY(-20%);
+}
+
+.task-action-button {
+    outline: 0 !important;
+}
+
+/* Set Custom CSS for Notifications Via Toastr */
+
+#toast-container > .toast {
+    background-image: none !important;
+}
+
+#toast-container > .toast:before {
+    position: relative;
+    font-family: 'FontAwesome';
+    font-size: 24px;
+    line-height: 18px;
+    float: left;
+    margin-left: -1em;
+    color: #FFF;
+    padding-right: 0.5em;
+    margin-right: 0.5em;
+}
+/*
+#toast-container > .toast-warning:before {
+    content: "\f003";
+}
+#toast-container > .toast-error:before {
+    content: "\f001";
+}
+#toast-container > .toast-info:before {
+    content: "\f005";
+}
+#toast-container > .toast-success:before {
+    content: "\f002";
+}*/

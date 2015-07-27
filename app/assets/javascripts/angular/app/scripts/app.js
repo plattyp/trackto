@@ -2,7 +2,8 @@
     angular.module('trackto', [
         'ui.router',
         'ui.bootstrap',
-        'toaster'
+        'toastr',
+        'chart.js'
         //'oc.lazyLoad',                  // ocLazyLoad
         //'ngIdle'                        // Idle timer
     ])

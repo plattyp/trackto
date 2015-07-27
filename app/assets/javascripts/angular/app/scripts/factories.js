@@ -6,8 +6,16 @@ function ObjectiveFactory($http) {
         return $http.get(urlBase);
     };
 
+    objectiveFactory.getObjective = function(objectiveId) {
+        return $http.get(urlBase + '/' + objectiveId);
+    };
+
     objectiveFactory.createObjective = function (objective) {
         return $http.post(urlBase, {"objective": objective});
+    };
+
+    objectiveFactory.deleteObjective = function (objectiveId) {
+        return $http.delete(urlBase + '/' + objectiveId);
     };
 
     return objectiveFactory;

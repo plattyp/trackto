@@ -1,23 +1,37 @@
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-success pull-right">Total</span>
+                    <span class="label label-info pull-right">Current</span>
                     <h5>Objectives</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">6</h1>
 
                     <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                    <small>Completed objectives</small>
+                    <small>Objectives</small>
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-info pull-right">Monthly</span>
+                    <span class="label label-info pull-right">Current</span>
+                    <h5>Subobjectives</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">10</h1>
+
+                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
+                    <small>Subobjectives</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-info pull-right">Current</span>
                     <h5>Progress</h5>
                 </div>
                 <div class="ibox-content">
@@ -28,102 +42,36 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">Today</span>
-                    <h5>Pace</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">106,120</h1>
-
-                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
-                    <small>New visits</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-danger pull-right">Low value</span>
-                    <h5>Achievability</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">80,600</h1>
-
-                    <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div>
-                    <small>In first month</small>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6" ng-controller="ObjectiveProgressChart" >
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div>
-                                            <span class="pull-right text-right">
-                                            <small>Average value of sales in the past month in: <strong>United states</strong></small>
-                                                <br/>
-                                                All sales: 162,862
-                                            </span>
                         <h3 class="font-bold no-margins">
-                            Half-year revenue margin
+                            Progress Over Time
                         </h3>
-                        <small>Sales marketing.</small>
-                    </div>
+                    </div><br />
 
-                    <div class="m-t-sm">
-
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div>
-                                    <canvas linechart options="chart.lineOptions" data="chart.lineDataDashboard4" height="114" responsive=true ></canvas>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <ul class="stat-list m-t-lg">
-                                    <li>
-                                        <h2 class="no-margins">2,346</h2>
-                                        <small>Total orders in period</small>
-                                        <div class="progress progress-mini">
-                                            <div class="progress-bar" style="width: 48%;"></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <h2 class="no-margins ">4,422</h2>
-                                        <small>Orders in last month</small>
-                                        <div class="progress progress-mini">
-                                            <div class="progress-bar" style="width: 60%;"></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="m-t-md">
-                        <small class="pull-right">
-                            <i class="fa fa-clock-o"> </i>
-                            Update on 16.07.2015
-                        </small>
-                        <small>
-                            <strong>Analysis of sales:</strong> The value has been changed over time, and last month reached a level over $50,000.
-                        </small>
-                    </div>
+                    <canvas id="line" class="chart chart-line" data="data" labels="labels" legend="false" series="series"></canvas> 
 
                 </div>
             </div>
         </div>
         <div class="col-lg-6" ng-controller="ObjectivesTodayCtrl">
             <div class="ibox-content">
-                <h2>Objectives Today</h2>
-                <small>A list of your objectives</small>
+                <h2>Subobjectives Today</h2>
+                <small>A list of your subobjectives that have not been progressed today. </small>
                 <ul class="todo-list m-t">
-                    <li ng-repeat="objective in objectives">
-                        <input icheck type="checkbox" ng-model="check">
-                        <span class="m-l-xs">{{objective.name}}</span>
+                    <li ng-attr-id="{{'today-row-' + $index}}" ng-repeat="objective in objectives">
+                        <span class="m-l-xs">{{objective.name}}
+                            <div class="task-actions pull-right">
+                                <button class="btn btn-primary btn-circle task-action-button" type="button" ng-click="addProgressSubmit($index, objective.id)"><i class="fa fa-check"></i>
+                                </button>
+                                <button class="btn btn-default btn-circle task-action-button" type="button" ng-click="ignoreSubobjectiveSubmit($index, objective.id)"><i class="fa fa-flag-o"></i>
+                                </button>
+                            </div>
+                        </span>
                     </li>
                 </ul>
             </div>

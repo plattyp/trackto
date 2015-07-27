@@ -62,10 +62,39 @@ function iboxTools($timeout) {
     };
 };
 
+function objectiveHeader($timeout) {
+    return {
+        restrict: 'A',
+        scope: true,
+        templateUrl: 'views/common/objective_header.html',
+        controller: function ($scope, $element) {
+            // Function for collapse ibox
+            $scope.showhide = function () {
+                var ibox = $element.closest('div.ibox');
+                var icon = $element.find('i:first');
+                var content = ibox.find('div.ibox-content');
+                content.slideToggle(200);
+                // Toggle icon from up to down
+                icon.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+                ibox.toggleClass('').toggleClass('border-bottom');
+                $timeout(function () {
+                    ibox.resize();
+                    ibox.find('[id^=map-]').resize();
+                }, 50);
+            },
+                // Function for close ibox
+                $scope.closebox = function () {
+                    var ibox = $element.closest('div.ibox');
+                    ibox.remove();
+                }
+        }
+    };
+};
+
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
  */
-function minimalizaSidebar($timeout) {
+function minimalizeSidebar($timeout) {
     return {
         restrict: 'A',
         template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
@@ -106,4 +135,5 @@ angular
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
-    .directive('minimalizaSidebar', minimalizaSidebar)
+    .directive('objectiveHeader', objectiveHeader)
+    .directive('minimalizeSidebar', minimalizeSidebar)

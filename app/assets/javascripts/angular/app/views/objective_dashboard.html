@@ -1,5 +1,15 @@
 <div class="wrapper wrapper-content" ng-controller="ObjectiveDetailCtrl as ObjDetailCtrl">
-    <div class="row" ng-repeat="objective in objectives | filter:isObjective">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{objective.name}}</h5>
+                    <div objective-header></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -7,9 +17,7 @@
                     <h5>Progress</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{objective.progress}}</h1>
-
-                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
+                    <h1 class="no-margins">{{objective.progress_pct}}</h1>
                     <small>Progress made</small>
                 </div>
             </div>
@@ -22,8 +30,6 @@
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">{{objective.pace}}</h1>
-
-                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
                     <small>Per Day</small>
                 </div>
             </div>
@@ -32,13 +38,11 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">Low value</span>
-                    <h5>Achievability</h5>
+                    <h5>Subobjectives</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{objective.achievability}}</h1>
-
-                    <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div>
-                    <small>at current time</small>
+                    <h1 class="no-margins">{{objective.subobjective_count}}</h1>
+                    <small>Total</small>
                 </div>
             </div>
         </div>
