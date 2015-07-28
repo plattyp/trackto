@@ -1,0 +1,12 @@
+{"subobjectives":
+  [
+  <% @subobjectives.each do |o| %>
+  {
+    "id": <%= o[:id] %>,
+    "name": "<%= o[:name] %>",
+    "description": "<%= o[:description] %>",
+    "objective_id": "<%= o[:objective_id] %>"
+  }<%= ',' unless @subobjectives.last == o %>
+  <% end %>
+  ]
+}
