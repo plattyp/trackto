@@ -3,11 +3,8 @@
     "id": <%= @objective.id %>,
     "name": "<%= @objective.name %>",
     "description": "<%= @objective.description %>",
-    "targetgoal": <%= @objective.targetgoal %>,
-    "targetdate": "<%= @objective.targetdate %>",
-    "pace": <%= @objective.pace %>,
-    "progress_pct": <%= @objective.progress_pct %>,
     "subobjective_count": <%= @subobjectives.size %>,
+    "progress": <%= @objective.total_progress %>,
     "archived": <%= @objective.is_archived? %>,
     "created_at": "<%= @objective.created_at %>",
     "updated_at": "<%= @objective.updated_at %>"
@@ -17,19 +14,19 @@
     <% @subobjectives.each do |s| %>
       {
         "id": <%= s[:id] %>,
-        "name": <%= s[:name] %>,
-        "description": <%= s[:description] %>,
+        "name": "<%= s[:name] %>",
+        "description": "<%= s[:description] %>",
         "progress": <%= s[:progress] %>
-      }
+      }<%= ',' unless @subobjectives.last == s %>
     <% end %>
   ],
   "progress":
   [
     <% @progress.each do |p| %>
       {
-        "parent_id": <%= p[:parent_id] %>,
-        "name": <%= p[:name] %>,
-        "type": <%= p[:type] %>,
+        "subobjective_id": <%= p[:subobjective_id] %>,
+        "name": "<%= p[:name] %>",
+        "type": "<%= p[:type] %>",
         "amount": <%= p[:amount] %>,
         "created_at": "<%= p[:created_at] %>"
       }<%= ',' unless @progress.last == p %>

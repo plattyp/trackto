@@ -4,7 +4,7 @@
   {
     "id": <%= p[:id] %>,
     "amount": <%= p[:amount] %>,
-    "objective_id": <%= p[:objective_id] %>,
+    "subobjective_id": <%= p[:subobjective_id] %>,
     "updated_at": "<%= p[:updated_at] %>"
   }<%= ',' unless @progresses.last == p %>
   <% end %>

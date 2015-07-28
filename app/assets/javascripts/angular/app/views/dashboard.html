@@ -60,12 +60,12 @@
                 <h2>Subobjectives Today</h2>
                 <small>A list of your subobjectives that you have not made progress on today </small>
                 <ul class="todo-list m-t">
-                    <li ng-attr-id="{{'today-row-' + $index}}" ng-repeat="objective in objectives">
-                        <span class="m-l-xs">{{objective.name}}
+                    <li ng-attr-id="{{'today-row-' + $index}}" ng-repeat="sub in objectives">
+                        <span class="m-l-xs">{{sub.name}}
                             <div class="task-actions pull-right">
-                                <button class="btn btn-primary btn-circle task-action-button" type="button" ng-click="addProgressSubmit($index, objective.id)"><i class="fa fa-check"></i>
+                                <button class="btn btn-primary btn-circle task-action-button" type="button" ng-click="addProgressSubmit($index, sub.id)"><i class="fa fa-check"></i>
                                 </button>
-                                <button class="btn btn-default btn-circle task-action-button" type="button" ng-click="ignoreSubobjectiveSubmit($index, objective.id)"><i class="fa fa-flag-o"></i>
+                                <button class="btn btn-default btn-circle task-action-button" type="button" ng-click="ignoreSubobjectiveSubmit($index, sub.id)"><i class="fa fa-flag-o"></i>
                                 </button>
                             </div>
                         </span>

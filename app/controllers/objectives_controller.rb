@@ -6,7 +6,6 @@ class ObjectivesController < ApiController
     @objectives = Objective.objectives_with_progress(current_user)
 
     respond_to do |format|
-      format.html
       format.json { render 'objectives/json/index.json.erb', status: 200, content_type: 'application/json' }
     end
   end
@@ -18,11 +17,8 @@ class ObjectivesController < ApiController
     respond_to do |format|
       if !@objective.nil?
         @progress = Progress.progress_history(@objective)
-
-        format.html
         format.json { render 'objectives/json/show.json.erb', status: 200, content_type: 'application/json' }
       else
-        format.html { redirect_to objectives_path, alert: 'Objective does not exist' }
         format.json { render json: {"error": "Objective does not exist"}, status: 404, content_type: 'application/json' }
       end
     end
@@ -38,12 +34,13 @@ class ObjectivesController < ApiController
     #Associate the user with the objective
     @objective.user_id = current_user.id
 
+    #Default value for progress on creation
+    @objective.progress = 0
+
     respond_to do |format|
       if @objective.save
-        format.html { redirect_to objectives_path, notice: 'Objective was successfully created!' }
         format.json { render json: @objective.to_json, status: 200 }
       else
-        format.html { render :new }
         format.json { render json: @objective.errors.to_json, status: :unprocessable_entity }
       end
     end
@@ -59,10 +56,8 @@ class ObjectivesController < ApiController
 
     respond_to do |format|
       if @objective.destroyed?
-        format.html { redirect_to objectives_path, notice: 'Objective was successfully deleted!' }
         format.json { render json: @objective.to_json, status: 200 }
       else
-        format.html { redirect_to objectives_path, notice: 'Objective was unable to be deleted' }
         format.json { render json: @objective.errors, status: :unprocessable_entity }
       end
     end
@@ -75,8 +70,21 @@ class ObjectivesController < ApiController
   end
 
   def objectives_overview
+    @details = {
+      objectiveCount: Objective.objective_count_by_user(current_user),
+      subobjectiveCount: Subobjective.subobjective_count_by_user(current_user),
+      progress: Objective.total_progress_per_user(current_user)
+    }
+
     respond_to do |format|
       format.json { render 'objectives/json/objectives_overview.json.erb', status: 200, content_type: 'application/json' }
+    end
+  end
+
+  def subobjectives_today
+    @subobjectives = Objective.get_all_subobjectives_not_progressed_today(current_user)
+    respond_to do |format|
+      format.json { render 'objectives/json/subobjectives_today.json.erb', status: 200, content_type: 'application/json' }
     end
   end
 
@@ -100,6 +108,6 @@ class ObjectivesController < ApiController
   private
 
   def objective_params
-    params.require(:objective).permit(:name,:description,:targetgoal,:targetdate)
+    params.require(:objective).permit(:name,:description)
   end
 end

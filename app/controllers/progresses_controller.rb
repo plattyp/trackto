@@ -15,14 +15,8 @@ class ProgressesController < ApiController
     @progresses = Progress.progress_history(@objective)
 
     respond_to do |format|
-      format.html
       format.json { render 'progresses/json/index.json.erb', status: 200, content_type: 'application/json' }
     end
-  end
-
-  def new
-    @context = find_context
-    @progress = @context.progresses.new
   end
 
   def create
@@ -31,11 +25,9 @@ class ProgressesController < ApiController
     
     respond_to do |format|
       if @progress.save
-        format.html { redirect_to context_path, notice: 'Progress was created successfully!' }
         format.json { render json: @progress.to_json, status: 200 }
       else
         @messages = @progress
-        format.html { render :new }
         format.json { render 'layouts/json/errors.json.erb', status: :unprocessable_entity }
       end
     end

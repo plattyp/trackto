@@ -184,44 +184,55 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
     }
 };
 
-function ObjectivesTodayCtrl($scope, ObjectiveFactory) {
+function ObjectivesTodayCtrl($scope, toastr, ObjectiveFactory) {
     $scope.objectives = [];
 
-    getObjectives();
+    getSubobjectivesToday();
 
-    function getObjectives() {
-        ObjectiveFactory.getObjectives()
+    function getSubobjectivesToday() {
+        ObjectiveFactory.getSubobjectivesToday()
             .success(function (objs) {
-                $scope.objectives = objs['objectives'];
+                $scope.objectives = objs['subobjectives'];
             })
             .error(function (error) {
-                $scope.status = 'Unable to load objectives data: ' + error.message;
+                $scope.status = 'Unable to load subobjectives data: ' + error.message;
             });
     }
 
-    $scope.addProgressSubmit = function(index, objectiveId) {
-        $scope.objectives.splice(index,1);
-        //console.log('Adding Progress for Objective: ' + objectiveId);
+    $scope.addProgressSubmit = function(index, subobjectiveId) {
+        ObjectiveFactory.addProgressSubobjective(subobjectiveId)
+            .success(function (subobjective) {
+                $scope.objectives.splice(index,1);
+            })
+            .error(function (error) {
+                toastr.error("Unable to add progress to the subojective", 'error');
+            });
     }
 
-    $scope.ignoreSubobjectiveSubmit = function(index, objectiveId) {
+    $scope.ignoreSubobjectiveSubmit = function(index, subobjectiveId) {
         $scope.objectives.splice(index,1);
-        //console.log('Ignoring Subobjective Progress for Objective: ' + objectiveId);
     }
 };
 
 function CreateObjectiveController($scope, toastr, ObjectiveFactory) {
     $scope.objective = {
         name: "",
-        targetgoal: "",
         description:""
     };
+
+    function clearObjectiveFields() {
+        $scope.objective = {
+            name: "",
+            description:""
+        };
+    }
 
     $scope.createObjective = function() {
         ObjectiveFactory.createObjective($scope.objective)
             .success(function() {
                 toastr.success("You successfully created an objective", 'Success');
                 $scope.$emit('tidyUp');
+                clearObjectiveFields();
             })
             .error(function(error) {
                 toastr.error("The objective could not be created", 'Error');
@@ -290,7 +301,7 @@ angular
     .controller('MainCtrl', ['$scope', MainCtrl])
     .controller('ObjectivesNavigationCtrl', ['$scope', 'ObjectiveFactory', ObjectivesNavigationCtrl])
     .controller('LoginController', ['$scope', '$window', 'toastr', 'UserFactory', LoginController])
-    .controller('ObjectivesTodayCtrl', ['$scope', 'ObjectiveFactory', ObjectivesTodayCtrl])
+    .controller('ObjectivesTodayCtrl', ['$scope', 'toastr','ObjectiveFactory', ObjectivesTodayCtrl])
     .controller('CreateObjectiveController', ['$scope','toastr','ObjectiveFactory', CreateObjectiveController])
     .controller('ObjectiveDetailCtrl',['$scope', '$stateParams', '$window', 'toastr', 'ObjectiveFactory', ObjectiveDetailCtrl])
     .controller('ObjectiveDashboard',['$scope','DashboardFactory', ObjectiveDashboard])

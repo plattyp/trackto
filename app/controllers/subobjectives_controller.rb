@@ -1,17 +1,10 @@
 class SubobjectivesController < ApplicationController
   #Used temporarily until authentication is put into place
   skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
-  before_filter :find_objective
+  before_filter :find_objective, except: :add_progress
 
   def index
     @subobjectives = Subobjective.all_subobjectives(@objective)
-  end
-
-  def show
-  end
-
-  def new
-    @subobjective = @objective.subobjectives.build
   end
 
   def create
@@ -19,19 +12,25 @@ class SubobjectivesController < ApplicationController
 
     respond_to do |format|
       if @subobjective.save
-        format.html { redirect_to objective_path(@objective), notice: 'Subobjective was successfully created!' }
         format.json { render json: @subobjective.to_json, status: 200 }
       else
-        format.html { render :new }
         format.json { render json: @subobjective.errors.to_json, status: :unprocessable_entity }
       end
     end
   end
 
-  def edit
-  end
+  def add_progress
+    @subobjective = Subobjective.find(params[:subobjective_id])
+    @progress = @subobjective.progresses.new(amount: 1)
 
-  def destroy
+    respond_to do |format|
+      if @progress.save
+        format.json { render json: @progress.to_json, status: 200 }
+      else
+        @messages = @progress
+        format.json { render 'layouts/json/errors.json.erb', status: :unprocessable_entity }
+      end
+    end
   end
 
   private

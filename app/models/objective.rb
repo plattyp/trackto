@@ -1,21 +1,31 @@
 class Objective < ActiveRecord::Base
   belongs_to :user
-  has_many :progresses, as: :progressable, :dependent => :destroy
   has_many :subobjectives, :dependent => :destroy
 
   validates :name, length: { in: 1..250 }
   validates :description, length: { maximum: 500 }
-  validates :targetgoal, numericality: { only_integer: true, greater_than: 0}
-  validate :target_date_greater_than_today, on: :create
+  validates :progress, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100}
 
   scope :recent_objectives, -> { order('objectives.created_at DESC') }
 
   def self.objectives_with_progress(user)
     objectives = []
     user.objectives.recent_objectives.each do |p|
-      objectives << {id: p.id, name: p.name, description: p.description, targetgoal: p.targetgoal, targetdate: p.target_date, progress: p.progress, pace: p.pace, progress_pct: p.progress_pct, last_progress_on: p.last_progress_on, archived: p.is_archived?, created_at: p.created_at.to_s, updated_at: p.most_updated_at.to_s}
+      objectives << {id: p.id, name: p.name, description: p.description, progress: p.obj_progress, archived: p.is_archived?, created_at: p.created_at.to_s, updated_at: p.updated_at.to_s}
     end
     objectives
+  end
+
+  def self.get_all_subobjectives_not_progressed_today(user)
+    subobjectives = []
+    user.objectives.each do |o|
+      o.subobjectives.each do |s|
+        if s.has_no_progress_today?
+          subobjectives << {id: s.id, name: s.name, description: s.description, objective_id: o.id}
+        end
+      end
+    end
+    subobjectives
   end
 
   def get_subobjectives
@@ -26,63 +36,34 @@ class Objective < ActiveRecord::Base
     subobjectives
   end
 
-  def pace
-    progress == 0 ? 0.00 : (progress/days_elapsed).round(2)
-  end
-
-  def progress
-    amount = 0
-    self.progresses.each { |p| amount += p.amount }
-    amount
-  end
-
-  def target_date
-    targetdate || "9999-12-31".to_date
-  end
-
-  def progress_pct
-    (progress.to_f / targetgoal.to_f).round(2) * 100
-  end
-
-  def most_updated_at
-    if has_progress?
-      most_recent_progress > updated_at ? most_recent_progress : updated_at
-    else
-      updated_at
-    end
-  end
-
-  def last_progress_on
-    most_recent_progress || Time.zone.local(9999, 12, 31, 01, 01, 01)
-  end
-
   def is_archived?
     archived || false
   end
 
+  def obj_progress
+    has_progress? ? progress : 0
+  end
+
+  def self.objective_count_by_user(user)
+    user.objectives.count
+  end
+
+  def self.total_progress_per_user(user)
+    progress = 0
+    user.objectives.each do |o|
+      o.subobjectives.each do |s|
+        progress += s.progress
+      end
+    end
+    progress
+  end
+
   private
 
-  def most_recent_progress
-    progresses.maximum(:updated_at) if has_progress?
-  end
-
   def has_progress?
-    progress > 0
-  end
-
-  def target_date_greater_than_today
-    return if targetdate.blank?
-    if (Time.zone.now - targetdate.to_datetime) > 0
-      errors.add(:targetdate, "must be greater than or equal to #{Date.today}")
+    if progress
+      progress > 0 ? true : false
     end
-  end
-
-  def days_difference
-    (Time.zone.now - created_at.to_datetime).to_i / 1.day
-  end
-
-  def days_elapsed
-    days_difference == 0 ? 1 : days_difference
   end
 
 end

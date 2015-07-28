@@ -26,6 +26,14 @@ function ObjectiveFactory($http) {
         return $http.post(urlBase + '/' + objectiveId + '/unarchive');
     };
 
+    objectiveFactory.getSubobjectivesToday = function() {
+        return $http.get('/api/subobjectives_today');
+    };
+
+    objectiveFactory.addProgressSubobjective = function(subobjectiveId) {
+        return $http.post('/api/subobjectives/' + subobjectiveId + '/add_progress');
+    };
+
     return objectiveFactory;
 };
 
