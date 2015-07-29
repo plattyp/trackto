@@ -21,7 +21,7 @@ class Objective < ActiveRecord::Base
     user.objectives.each do |o|
       o.subobjectives.each do |s|
         if s.has_no_progress_today?
-          subobjectives << {id: s.id, name: s.name, description: s.description, objective_id: o.id}
+          subobjectives << {id: s.id, name: s.name, description: s.description, objective_id: o.id, objective_name: o.name}
         end
       end
     end

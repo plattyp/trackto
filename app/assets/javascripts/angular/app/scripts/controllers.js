@@ -248,6 +248,13 @@ function ObjectiveDashboard($scope, DashboardFactory) {
     $scope.subobjectivesCount = 0;
     $scope.progressCount = 0;
 
+    $scope.activeTimeFrame = 'Months';
+
+    $scope.changeProgressTimeFrame = function(timeframe) {
+        $scope.activeTimeFrame = timeframe;
+        getProgressOverview();
+    }
+
     function getObjectivesOverview() {
         DashboardFactory.getObjectivesOverview()
             .success(function (data) {

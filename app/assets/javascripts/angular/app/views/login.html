@@ -1,25 +1,50 @@
-<div class="middle-box text-center loginscreen animated fadeInDown">
-    <div>
-        <div>
-            <img class="logo-name" ng-src="{{ main.logo }}" class="img-responsive"/>
-        </div><br />
-        <h3>Track your goals. 
-        Track your Life.</h3>
-        <form class="m-t" ng-controller="LoginController">
-            <div class="form-group">
-                <input type="email" class="form-control" placeholder="Email" ng-model="user.email" required="">
+<div class="loginColumns animated fadeInDown">
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                <img class="logo-name" ng-src="{{ main.logo }}" class="img-responsive"/>
+            </div><br />
+            <h3>Track your goals. 
+            Track your Life.</h3>
+            <p>
+                A simple app that lets you track your goals and lets see over time how all of the daily tasks you perform lead to achieving those goals.
+            </p>
+
+            <p>
+                As a hybrid between data and motivation, we try to provide you a stripped down interface to motivate yourself with the tools you need to succeed.
+            </p>
+
+            <p>
+                This was a simple idea that grew to a web app & in the future mobile application, so if you have suggestions please forward them along.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox-content">
+                <form class="m-t" ng-controller="LoginController">
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" ng-model="user.email" required="">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="user.password"required="">
+                    </div>
+                    <button ng-show="isLogin" ng-disabled="!isLogin" ng-click="login()" class="btn btn-primary block full-width m-b">Login</button>
+                    <button ng-hide="isLogin" ng-click="signup()" class="btn btn-primary block full-width m-b">Sign Up</button>
+                    <a href="#"><small>Forgot password?</small></a>
+                    <p ng-show="isLogin" class="text-muted text-center"><small>Don't have an account?</small></p>
+                    <p ng-hide="isLogin" class="text-muted text-center"><small>Already have an account?</small></p>
+                    <a ng-show="isLogin" class="btn btn-sm btn-white btn-block" ng-click="changeToSignup()">Create an account</a>
+                    <a ng-hide="isLogin" class="btn btn-sm btn-white btn-block" ng-click="changeToLogin()">Login to Account</a>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control" placeholder="Password" ng-model="user.password"required="">
-            </div>
-            <button ng-show="isLogin" ng-disabled="!isLogin" ng-click="login()" class="btn btn-primary block full-width m-b">Login</button>
-            <button ng-hide="isLogin" ng-click="signup()" class="btn btn-primary block full-width m-b">Sign Up</button>
-            <a href="#"><small>Forgot password?</small></a>
-            <p ng-show="isLogin" class="text-muted text-center"><small>Don't have an account?</small></p>
-            <p ng-hide="isLogin" class="text-muted text-center"><small>Already have an account?</small></p>
-            <a ng-show="isLogin" class="btn btn-sm btn-white btn-block" ng-click="changeToSignup()">Create an account</a>
-            <a ng-hide="isLogin" class="btn btn-sm btn-white btn-block" ng-click="changeToLogin()">Login to Account</a>
-        </form>
-        <p class="m-t"> <small>&copy; 2015 Andrew Platkin</small> </p>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            Andrew Platkin
+        </div>
+        <div class="col-md-6 text-right">
+           <small>&copy; 2015</small>
+        </div>
     </div>
 </div>

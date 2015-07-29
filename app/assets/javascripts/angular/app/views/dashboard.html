@@ -45,9 +45,17 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div>
-                        <h3 class="font-bold no-margins">
+                        <h3 class="font-bold no-margins pull-left">
                             Progress Over Time
                         </h3>
+                        <div class="btn-group pull-right">
+                            <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">{{activeTimeFrame}} <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li ng-class="(activeTimeFrame=='Months') ? 'active' : ''"><a ng-click="changeProgressTimeFrame('Months')" href="#">Months</a></li>
+                                <li ng-class="(activeTimeFrame=='Weeks') ? 'active' : ''"><a ng-click="changeProgressTimeFrame('Weeks')" href="#">Weeks</a></li>
+                                <li ng-class="(activeTimeFrame=='Days') ? 'active' : ''"><a ng-click="changeProgressTimeFrame('Days')" href="#">Days</a></li>
+                            </ul>
+                        </div>
                     </div><br />
 
                     <canvas id="line" class="chart chart-line" data="data" labels="labels" legend="false" series="series"></canvas> 

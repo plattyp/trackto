@@ -5,7 +5,8 @@
     "id": <%= o[:id] %>,
     "name": "<%= o[:name] %>",
     "description": "<%= o[:description] %>",
-    "objective_id": "<%= o[:objective_id] %>"
+    "objective_id": "<%= o[:objective_id] %>",
+    "objective_name": "<%= o[:objective_name] %>"
   }<%= ',' unless @subobjectives.last == o %>
   <% end %>
   ]
