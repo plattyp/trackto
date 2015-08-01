@@ -13,36 +13,36 @@
         <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-info pull-right">Monthly</span>
-                    <h5>Progress</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">{{objective.progress}}</h1>
-                    <small>Progress made</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">Today</span>
-                    <h5>Pace</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">{{objective.pace}}</h1>
-                    <small>Per Day</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-danger pull-right">Low value</span>
+                    <span class="label label-info pull-right">Current</span>
                     <h5>Subobjectives</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">{{objective.subobjective_count}}</h1>
                     <small>Total</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-info pull-right">Total</span>
+                    <h5>Subobjective Progress</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{objective.sub_progress}}</h1>
+                    <small>Progress Amount</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">Last 14 Days</span>
+                    <h5>Longest Streak</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{objective.longest_streak_last_14}}</h1>
+                    <small>Consecutive day progress</small>
                 </div>
             </div>
         </div>

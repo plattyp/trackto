@@ -3,7 +3,8 @@
         'ui.router',
         'ui.bootstrap',
         'toastr',
-        'chart.js'
+        'chart.js',
+        'angular-steps'
         //'oc.lazyLoad',                  // ocLazyLoad
         //'ngIdle'                        // Idle timer
     ])

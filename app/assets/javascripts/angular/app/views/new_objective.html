@@ -1,36 +1,96 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-      <div class="col-lg-12">
-        <div class="wizard-big wizard clearfix">
-          <div class="ibox">
+    <div class="col-lg-12">
+      <div class="ibox" ng-controller="CreateObjectiveController">
+        <steps>
+          <step>
               <div class="ibox-title">
-                  <h5>Create a New Objective</h5>
+                  <h5>Build an Objective</h5>
               </div>
               <div class="ibox-content">
-                  <form id="createObjectiveForm" ng-submit="createObjective()" ng-controller="CreateObjectiveController">
-                      <fieldset>
-                          <div class="row">
-                              <div class="col-lg-8">
-                              <span class="error" ng-show="createObjectiveError"></span><br>
-                                  <div class="form-group">
-                                      <label>Name *</label>
-                                      <input id="name" name="name" type="text" ng-model="objective.name" class="form-control required">
-                                  </div>
-                                  <div class="form-group">
-                                      <label>Description</label>
-                                      <input id="description" name="description" type="text" ng-model="objective.description" class="form-control">
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="actions">
-                            <button type="submit" class="btn btn-primary">Create Objective</button>
-                          </div>
-                      </fieldset>
-                  </form>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input id="nameObjective" name="name" type="text" ng-model="objective.name" class="form-control required">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="descriptionObjective" name="description" type="text" ng-model="objective.description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          Tips for an Objective
+                        </div>
+                        <div class="panel-body">
+                          <p>When creating an Objective. You want to create something that is "Completable" in the sense that there is a defined end that you have in 
+                          mind.</p>
+
+                          <p>For instance, a defined goal could be to "lose 10 pounds". This means that
+                          by the end of all of your progress tracking will weigh 10 pounds less than
+                          the time you set the goal.</p>
+
+                          <p>You can also set more interpretable goals like "Hold a Conversation in Spanish". As long as you can clearly articulate the end result and how to measure it, the goal can be set up this way.</p>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-8">
+                    <div class="pull-right">
+                      <button class="btn btn-primary" step-next="doStuff()">Add Subobjectives</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-          </div>
-          </div>
-        </div>
+          </step>
+          <step>
+            <div class="ibox-title">
+                <h5>Add Subobjectives</h5>
+            </div>
+            <div class="ibox-content">
+              <div class="row">
+                  <div class="col-lg-8">
+                    <div ng-repeat="sub in objective.subobjectives_attributes">
+                      <hr ng-hide="{{$index === 0}}"/>
+                      <div class="form-group">
+                          <label>Name *</label>
+                          <input id="nameSubobjective" name="name" type="text" ng-model="sub.name" class="form-control required">
+                      </div>
+                      <div class="form-group">
+                          <label>Description</label>
+                          <textarea id="descriptionSubobjective" name="description" type="text" ng-model="sub.description" class="form-control"></textarea>
+                      </div>
+                    </div>
+                    <a href ng-click="addAnotherSub()">Add Another</a>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="panel panel-primary">
+                      <div class="panel-heading">
+                        Tips for Subobjectives
+                      </div>
+                      <div class="panel-body">
+                        <p>When creating a subobjective, define something that will help you achieve your overall goal and is measurable by actions. For example if your objective was to "lose 10 pounds", then one of your subobjectives could be "Excercise for 30 Minutes".</p>
+
+                        <p>Subobjectives are the driving mechanism for achieving your objectives, so make sure that you get specific on how you define them and make them achievable. It is much better to break you subobjectives to be more granular if necessary (i.e. make one subojective "Cardio for atleast 20 Minutes" and another be "Lift Weights for atleast 20 minutes".</p>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="pull-right">
+                    <button class="btn btn-primary" step-previous="doStuff()">Edit Objective</button>
+                    <button class="btn btn-success" step-next="createObjective()">Finish</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </step>
+        </steps>
       </div>
+    </div>
   </div>
 </div>

@@ -19,6 +19,36 @@ class Progress < ActiveRecord::Base
     return progress.sort_by {|p| p[:created_at_date]}.reverse
   end
 
+  def self.progress_overview_by_user_by_timeframe(userId, timeframe, limit, offsetseconds)
+    query = ""
+    if timeframe === 'days'
+      query = "SELECT 
+              to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD') AS x,
+              sum(p.amount) AS progress
+              FROM progresses p
+              join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+              join objectives o on s.objective_id = o.id
+              WHERE
+              (p.created_at + interval '"+ offsetseconds.to_s + " seconds') > (current_date - interval '" + limit.to_s + " days')
+              AND o.user_id = " + userId.to_s + "
+              GROUP BY
+              to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD')
+              ORDER BY
+              to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD')"
+    end
+
+    if !query.blank?
+      mappedresults = {}
+      results = ActiveRecord::Base.connection.execute(query)
+      results.each do |r|
+        mappedresults[r['x']] = r['progress']
+      end
+      return mappedresults
+    end
+
+    return {}
+  end
+
   def self.all_progress
     progress = []
     Progress.all.each do |p|

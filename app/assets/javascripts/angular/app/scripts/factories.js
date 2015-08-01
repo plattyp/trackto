@@ -39,10 +39,12 @@ function ObjectiveFactory($http) {
 
 function DashboardFactory($http) {
     var urlBase = '/api/';
+    var timeZoneOffset = new Date().getTimezoneOffset() * -60;
     dashboardFactory = {};
 
     dashboardFactory.getProgressOverview = function() {
-        return $http.get(urlBase + 'progress_overview');
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
+        return $http.get(urlBase + 'progress_overview?' + params);
     }
 
     dashboardFactory.getObjectivesOverview = function() {

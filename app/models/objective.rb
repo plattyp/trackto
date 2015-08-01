@@ -1,6 +1,7 @@
 class Objective < ActiveRecord::Base
   belongs_to :user
   has_many :subobjectives, :dependent => :destroy
+  accepts_nested_attributes_for :subobjectives
 
   validates :name, length: { in: 1..250 }
   validates :description, length: { maximum: 500 }
@@ -28,12 +29,41 @@ class Objective < ActiveRecord::Base
     subobjectives
   end
 
+  def self.find_by_id_and_user(objectiveId, user)
+    objective = Objective.find_by_id(objectiveId)
+
+    if objective.user_id = user.id
+      return objective
+    else
+      return nil
+    end
+  end
+
   def get_subobjectives
     subobjectives = []
     self.subobjectives.each do |p|
       subobjectives << {id: p.id, name: p.name, description: p.description, progress: p.progress, created_at: p.created_at.to_s}
     end
     subobjectives
+  end
+
+  def get_subobjectives_total_progress
+    total = 0
+    self.subobjectives.each do |p|
+      total += p.progress
+    end
+    total
+  end
+
+  def get_longest_streak_for_a_subobjective_in_last_days(days)
+    streak = 0
+    self.subobjectives.each do |s|
+      newstreak = s.get_streak_in_last_days(days)
+      if newstreak > streak
+        streak = newstreak
+      end
+    end
+    streak
   end
 
   def is_archived?

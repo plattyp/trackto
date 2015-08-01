@@ -30,12 +30,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-info pull-right">Current</span>
-                    <h5>Progress</h5>
+                    <h5>Subobjective Progress</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">{{progressCount}}</h1>
 
-                    <small>Progress made</small>
+                    <small>Total Amount</small>
                 </div>
             </div>
         </div>
@@ -57,6 +57,12 @@
                             </ul>
                         </div>
                     </div><br />
+
+                    <div ng-hide="showNoDataMessage()" class="noProgressChart">
+                        <p>No Progress Has Been Made Yet</p>
+
+                        <p>Get Started!</p>
+                    </div>
 
                     <canvas id="line" class="chart chart-line" data="data" labels="labels" legend="false" series="series"></canvas> 
 

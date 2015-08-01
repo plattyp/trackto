@@ -7,6 +7,10 @@ function MainCtrl($scope) {
     $scope.$on('tidyUp', function(event) {
         $scope.$broadcast('resetNav');
     });
+
+    $scope.$on('progressMade', function(event) {
+        $scope.$broadcast('resetProgressOverview');
+    });
 };
 
 function LoginController($scope, $window, toastr, UserFactory) {
@@ -203,6 +207,7 @@ function ObjectivesTodayCtrl($scope, toastr, ObjectiveFactory) {
         ObjectiveFactory.addProgressSubobjective(subobjectiveId)
             .success(function (subobjective) {
                 $scope.objectives.splice(index,1);
+                $scope.$emit('progressMade');
             })
             .error(function (error) {
                 toastr.error("Unable to add progress to the subojective", 'error');
@@ -214,20 +219,37 @@ function ObjectivesTodayCtrl($scope, toastr, ObjectiveFactory) {
     }
 };
 
-function CreateObjectiveController($scope, toastr, ObjectiveFactory) {
+function CreateObjectiveController($scope, toastr, StepsService, ObjectiveFactory) {
     $scope.objective = {
         name: "",
-        description:""
+        description:"",
+        subobjectives_attributes: [{
+                name: "",
+                description: ""
+        }]
+    };
+
+    $scope.addAnotherSub = function() {
+        var newSub = {
+            name: "",
+            description: ""
+        };
+        $scope.objective.subobjectives_attributes.push(newSub);
     };
 
     function clearObjectiveFields() {
         $scope.objective = {
             name: "",
-            description:""
+            description:"",
+            subobjectives_attributes: [{
+                    name: "",
+                    description: ""
+            }]
         };
     }
 
     $scope.createObjective = function() {
+        console.log($scope.objective);
         ObjectiveFactory.createObjective($scope.objective)
             .success(function() {
                 toastr.success("You successfully created an objective", 'Success');
@@ -248,7 +270,7 @@ function ObjectiveDashboard($scope, DashboardFactory) {
     $scope.subobjectivesCount = 0;
     $scope.progressCount = 0;
 
-    $scope.activeTimeFrame = 'Months';
+    $scope.activeTimeFrame = 'Days';
 
     $scope.changeProgressTimeFrame = function(timeframe) {
         $scope.activeTimeFrame = timeframe;
@@ -271,9 +293,15 @@ function ObjectiveDashboard($scope, DashboardFactory) {
     $scope.progress = {};
     $scope.labels = [];
     $scope.series = ['Objective Progress'];
-    $scope.data = [
-        [65, 59, 80, 81, 56, 55, 40]
-    ];
+    $scope.data = [];
+
+    $scope.showNoDataMessage = function() {
+        return $scope.data > 0 ? true : false;
+    }
+
+    $scope.$on('resetProgressOverview', function(event) {
+        getProgressOverview();
+    });
 
     function getProgressOverview() {
         DashboardFactory.getProgressOverview()
@@ -309,6 +337,6 @@ angular
     .controller('ObjectivesNavigationCtrl', ['$scope', 'ObjectiveFactory', ObjectivesNavigationCtrl])
     .controller('LoginController', ['$scope', '$window', 'toastr', 'UserFactory', LoginController])
     .controller('ObjectivesTodayCtrl', ['$scope', 'toastr','ObjectiveFactory', ObjectivesTodayCtrl])
-    .controller('CreateObjectiveController', ['$scope','toastr','ObjectiveFactory', CreateObjectiveController])
+    .controller('CreateObjectiveController', ['$scope','toastr','StepsService','ObjectiveFactory', CreateObjectiveController])
     .controller('ObjectiveDetailCtrl',['$scope', '$stateParams', '$window', 'toastr', 'ObjectiveFactory', ObjectiveDetailCtrl])
     .controller('ObjectiveDashboard',['$scope','DashboardFactory', ObjectiveDashboard])

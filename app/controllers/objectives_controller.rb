@@ -11,8 +11,8 @@ class ObjectivesController < ApiController
   end
 
   def show
-    @objective = Objective.find_by_id(params[:id])
-    @subobjectives = @objective.get_subobjectives
+    @objective = Objective.find_by_id_and_user(params[:id], current_user)
+    @subobjectives = @objective.get_subobjectives if !@objective.nil?
 
     respond_to do |format|
       if !@objective.nil?
@@ -64,6 +64,7 @@ class ObjectivesController < ApiController
   end
 
   def progress_overview
+    @progress = Progress.progress_overview_by_user_by_timeframe(current_user.id,'days',14,params[:timezoneOffsetSeconds])
     respond_to do |format|
       format.json { render 'objectives/json/progress_overview.json.erb', status: 200, content_type: 'application/json' }
     end
@@ -108,6 +109,6 @@ class ObjectivesController < ApiController
   private
 
   def objective_params
-    params.require(:objective).permit(:name,:description)
+    params.require(:objective).permit(:name,:description, subobjectives_attributes: [:id, :name, :description])
   end
 end

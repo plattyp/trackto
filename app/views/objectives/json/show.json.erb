@@ -4,8 +4,10 @@
     "name": "<%= @objective.name %>",
     "description": "<%= @objective.description %>",
     "subobjective_count": <%= @subobjectives.size %>,
-    "progress": <%= @objective.obj_progress %>,
+    "obj_progress": <%= @objective.obj_progress %>,
+    "sub_progress": <%= @objective.get_subobjectives_total_progress %>,
     "archived": <%= @objective.is_archived? %>,
+    "longest_streak_last_14": <%= @objective.get_longest_streak_for_a_subobjective_in_last_days(14) %>,
     "created_at": "<%= @objective.created_at %>",
     "updated_at": "<%= @objective.updated_at %>"
   },
