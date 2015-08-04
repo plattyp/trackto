@@ -1,7 +1,4 @@
 function MainCtrl($scope) {
-    this.userName = 'Example user';
-    this.helloText = 'Welcome in SeedProject';
-    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
     this.logo = 'img/tracktosmaller.png';
 
     $scope.$on('tidyUp', function(event) {
@@ -122,24 +119,92 @@ function ObjectivesNavigationCtrl($scope, ObjectiveFactory) {
 
 function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFactory) {
     $scope.objective = {};
+    $scope.subobjectives = [];
+    $scope.progressTrend = {};
     $scope.selected_id = $stateParams.objectiveId;
 
+    // Breakdown Chart
+    $scope.breakdownLabels = [];
+    $scope.breakdownSeries = ['Progress Breakdown'];
+    $scope.breakdownData = [];
+
+    // Progress Trend Chart
+    $scope.progressTrendLabels = [];
+    $scope.progressTrendSeries = [];
+    $scope.progressTrendData   = [];
+
     getObjective($scope.selected_id);
+    getObjectiveProgressTrend($scope.selected_id);
 
     $scope.isArchived = function() {
         return $scope.objective.archived || false;
+    }
+
+    $scope.showNoDataMessage = function() {
+        return $scope.breakdownData.length > 0;
     }
 
     function getObjective(objectiveId) {
         ObjectiveFactory.getObjective(objectiveId)
             .success(function (obj) {
                 $scope.objective = obj['objective'];
+                $scope.subobjectives = obj['subobjectives'];
+                if (Object.keys($scope.subobjectives).length > 0) {
+                    reloadBreakdownChartData();
+                }
             })
             .error(function (error) {
                 if (error) {
                     $scope.status = 'Unable to load objectives data: ' + error.message;
                 }
             });
+    }
+
+    function reloadBreakdownChartData() {
+        var subs = $scope.subobjectives;
+        $scope.labels = [];
+        $scope.data = [];
+        var data = [];
+        for (var i in subs) {
+            $scope.breakdownLabels.push(subs[i].name);
+            $scope.breakdownData.push(subs[i].progress);
+        }
+    }
+
+    function getObjectiveProgressTrend(objectiveId) {
+        ObjectiveFactory.getProgressTrendForObjective(objectiveId)
+            .success(function (obj){
+                $scope.progressTrend = obj;
+                if(Object.keys(obj).length > 0) {
+                    reloadProgressTrendChartData();
+                }
+            })
+            .error(function (error) {
+                if (error) {
+                    $scope.status = 'Unable to load progress trend data: ' + error.message;
+                }
+            })
+    }
+
+    function reloadProgressTrendChartData() {
+        var prg = $scope.progressTrend;
+        $scope.progressTrendSeries = [];
+        $scope.progressTrendLabels = [];
+        $scope.progressTrendData = [];
+        for (var sub in prg) {
+            $scope.progressTrendSeries.push(sub);
+            var dataPoints   = prg[sub];
+            var newDataArray = [];
+            for (var i in dataPoints){
+                // If label doesn't exist, add it
+                if ($scope.progressTrendLabels.indexOf(i) < 0) {
+                    $scope.progressTrendLabels.push(i);
+                }
+                // Add data regardless to the multidimensional array
+                newDataArray.push(dataPoints[i]);
+            }
+            $scope.progressTrendData.push(newDataArray);
+        }
     }
 
     $scope.deleteObjective = function() {
@@ -219,7 +284,7 @@ function ObjectivesTodayCtrl($scope, toastr, ObjectiveFactory) {
     }
 };
 
-function CreateObjectiveController($scope, toastr, StepsService, ObjectiveFactory) {
+function CreateObjectiveController($scope, $window, toastr, StepsService, ObjectiveFactory) {
     $scope.objective = {
         name: "",
         description:"",
@@ -229,13 +294,67 @@ function CreateObjectiveController($scope, toastr, StepsService, ObjectiveFactor
         }]
     };
 
+    // Functions for moving the form / validation
+    $scope.validateObjectivePortion = function() {
+        if (!$scope.objective.name || $scope.objective.name.length === 0) {
+            toastr.error("Objective name is required", 'Error');
+            StepsService.steps().cancel();
+        }
+    };
+
+    $scope.validateSubbjectivePortion = function() {
+        var valid = true;
+        var error = "";
+        if ($scope.objective.subobjectives_attributes.length > 0) {
+            var subs = $scope.objective.subobjectives_attributes;
+            for (var i in subs) {
+                if (subs[i].name === "") {
+                    error = "A subobjective must have a name";
+                    valid = false;
+                }
+            }
+        } else {
+            error = "Atleast one subobjective is required";
+            valid = false;
+        }
+
+        if (valid) {
+            $scope.createObjective();
+        } else {
+            toastr.error(error,'Error');
+        }
+    };
+
+    // Functions for the adding / removing subobjectives to the form
+    $scope.showRemoveSubobjectiveButton = function() {
+        return $scope.objective.subobjectives_attributes.length > 1;
+    };
+
+    $scope.showAddSubobjectiveButton = function() {
+        var subs = $scope.objective.subobjectives_attributes;
+        var shouldShow = true;
+        for (var i in subs) {
+            if (subs[i].name === "" && subs[i].description === "") {
+                shouldShow = false;
+            }
+        }
+        return shouldShow;
+    };
+
+    $scope.removeSub = function(index) {
+        $scope.objective.subobjectives_attributes.splice(index,1);
+    };
+
     $scope.addAnotherSub = function() {
         var newSub = {
             name: "",
-            description: ""
+            description: "",
+            active: true
         };
         $scope.objective.subobjectives_attributes.push(newSub);
     };
+
+    //
 
     function clearObjectiveFields() {
         $scope.objective = {
@@ -248,10 +367,23 @@ function CreateObjectiveController($scope, toastr, StepsService, ObjectiveFactor
         };
     }
 
+    function cleanObjective() {
+        var objective = $scope.objective;
+        var subs = objective.subobjectives_attributes;
+        for (var i in subs) {
+            if (subs[i].name === "" && subs[i].description === "") {
+                subs.splice(i,1);
+            }
+        }
+        objective.subobjectives_attributes = subs;
+        return objective;
+    }
+
     $scope.createObjective = function() {
-        console.log($scope.objective);
-        ObjectiveFactory.createObjective($scope.objective)
-            .success(function() {
+        var objective = cleanObjective();
+        ObjectiveFactory.createObjective(objective)
+            .success(function(obj) {
+                $window.location.href = '/#/index/objectives/' + obj['id'];
                 toastr.success("You successfully created an objective", 'Success');
                 $scope.$emit('tidyUp');
                 clearObjectiveFields();
@@ -296,7 +428,7 @@ function ObjectiveDashboard($scope, DashboardFactory) {
     $scope.data = [];
 
     $scope.showNoDataMessage = function() {
-        return $scope.data > 0 ? true : false;
+        return $scope.data.length > 0 ? true : false;
     }
 
     $scope.$on('resetProgressOverview', function(event) {
@@ -337,6 +469,6 @@ angular
     .controller('ObjectivesNavigationCtrl', ['$scope', 'ObjectiveFactory', ObjectivesNavigationCtrl])
     .controller('LoginController', ['$scope', '$window', 'toastr', 'UserFactory', LoginController])
     .controller('ObjectivesTodayCtrl', ['$scope', 'toastr','ObjectiveFactory', ObjectivesTodayCtrl])
-    .controller('CreateObjectiveController', ['$scope','toastr','StepsService','ObjectiveFactory', CreateObjectiveController])
+    .controller('CreateObjectiveController', ['$scope','$window','toastr','StepsService','ObjectiveFactory', CreateObjectiveController])
     .controller('ObjectiveDetailCtrl',['$scope', '$stateParams', '$window', 'toastr', 'ObjectiveFactory', ObjectiveDetailCtrl])
     .controller('ObjectiveDashboard',['$scope','DashboardFactory', ObjectiveDashboard])

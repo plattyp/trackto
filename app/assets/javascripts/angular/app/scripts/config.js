@@ -75,6 +75,3 @@ angular
         $state.go('login');
       });
     });
-    // .run(function($rootScope, $state) {
-    //     $rootScope.$state = $state;
-    // });

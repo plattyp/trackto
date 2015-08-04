@@ -12,6 +12,19 @@
     padding:0px 0px
 }
 
+.logo img {
+    content: url(../img/tracktosmaller.png);
+}
+
+/*
+.logo[max-width='70px'] img {
+    content: url(../img/tracktoCheckmark.png);
+}
+
+*/
+
+/* For Task Buttons */
+
 .task-actions {
     transform: translateY(-20%);
 }

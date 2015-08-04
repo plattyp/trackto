@@ -33,38 +33,45 @@ class Subobjective < ActiveRecord::Base
   end
 
   def get_streak_in_last_days(daylimit)
-    sorted = self.progresses.sort { |x, y| x.created_at <=> y.created_at }
+    query = ""
+    if daylimit > 0
+      query = "SELECT
+              MAX(streak) AS streak
+              FROM
+              (
+              SELECT
+              date,
+              grp,
+              row_number() OVER (PARTITION BY grp ORDER BY date) AS streak
+              FROM
+              (
+              SELECT
+              date,
+              date::date - '2000-01-01'::date - row_number() OVER (ORDER BY date) as grp
+              FROM
+              (
+              SELECT 
+              to_char(p.created_at,'YYYY-MM-DD') AS date,
+              sum(p.amount) AS progress
+              FROM 
+                progresses p
+                join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+                join objectives o on s.objective_id = o.id
+              WHERE
+                s.id = " + id.to_s + "
+                AND p.created_at > (current_date - interval '" + daylimit.to_s + " days')
+              GROUP BY
+                to_char(p.created_at,'YYYY-MM-DD')
+              ) t ) s ) o"
+    end
 
     streak = 0
-    previousvalue = -1
-    sorted.each do |s|
-      daysago = (Time.zone.now - s.created_at).to_i / 1.day
-      # Ensure the day value is within the limit set
-      if daysago < daylimit
-        # Ensure I only compare after the first iteration
-        if previousvalue > -1
-          # Compare value and determine if the previous progress happened the day before
-          if daysago === (previousvalue - 1)
-            streak += 1
-          # Compare value and determine if the previous progress happened the same day
-          elsif daysago === previousvalue
-            streak = streak
-          # If neither, reset the streak
-          else
-            streak = 0
-          end
-        end
-        # Set the previous value to the current day for comparison
-        previousvalue = daysago
-      end
+    if !query.blank?
+      results = ActiveRecord::Base.connection.execute(query)
+      streak = results[0]['streak'] || 0
     end
 
-    # If there has been any progress within limit, show 1 as the streak
-    if previousvalue > -1 && streak === 0
-      return 1
-    else 
-      return streak
-    end
+    return streak
   end
 
   private

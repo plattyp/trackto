@@ -12,11 +12,14 @@
                     <div class="col-lg-8">
                         <div class="form-group">
                             <label>Name *</label>
-                            <input id="nameObjective" name="name" type="text" ng-model="objective.name" class="form-control required">
+                            <input id="nameObjective" name="name" type="text" ng-model="objective.name" class="form-control required" required>
                         </div>
                         <div class="form-group">
                             <label>Description</label>
                             <textarea id="descriptionObjective" name="description" type="text" ng-model="objective.description" class="form-control"></textarea>
+                        </div>
+                        <div class="pull-right">
+                          <button class="btn btn-primary" step-next ng-click="validateObjectivePortion()">Add Subobjectives</button>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -37,13 +40,6 @@
                       </div>
                     </div>
                 </div>
-                <div class="row">
-                  <div class="col-lg-8">
-                    <div class="pull-right">
-                      <button class="btn btn-primary" step-next="doStuff()">Add Subobjectives</button>
-                    </div>
-                  </div>
-                </div>
               </div>
           </step>
           <step>
@@ -53,18 +49,26 @@
             <div class="ibox-content">
               <div class="row">
                   <div class="col-lg-8">
-                    <div ng-repeat="sub in objective.subobjectives_attributes">
-                      <hr ng-hide="{{$index === 0}}"/>
-                      <div class="form-group">
-                          <label>Name *</label>
-                          <input id="nameSubobjective" name="name" type="text" ng-model="sub.name" class="form-control required">
-                      </div>
-                      <div class="form-group">
-                          <label>Description</label>
-                          <textarea id="descriptionSubobjective" name="description" type="text" ng-model="sub.description" class="form-control"></textarea>
-                      </div>
+                    <tabset>
+                      <tab ng-repeat="sub in objective.subobjectives_attributes" heading="{{sub.name}}" active="sub.active">
+                        <br />
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input id="nameSubobjective" name="name" type="text" ng-model="sub.name" class="form-control required">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="descriptionSubobjective" name="description" type="text" ng-model="sub.description" class="form-control"></textarea>
+                        </div>
+                        <a href ng-show="showRemoveSubobjectiveButton()" class="pull-left text-danger" ng-click="removeSub($index)">Remove Subobjective</a>
+                        <p ng-show="showRemoveSubobjectiveButton() && showAddSubobjectiveButton()" class="pull-left"> | </p>
+                        <a href ng-show="showAddSubobjectiveButton()" class="pull-left" ng-click="addAnotherSub()">Add Another</a>
+                      </tab>
+                    </tabset>
+                    <div class="pull-right">
+                      <button class="btn btn-primary" step-previous="doStuff()">Edit Objective</button>
+                      <button class="btn btn-success" step-next="validateSubbjectivePortion()">Finish</button>
                     </div>
-                    <a href ng-click="addAnotherSub()">Add Another</a>
                   </div>
                   <div class="col-lg-4">
                     <div class="panel panel-primary">
@@ -78,14 +82,6 @@
                       </div>
                     </div>
                   </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-8">
-                  <div class="pull-right">
-                    <button class="btn btn-primary" step-previous="doStuff()">Edit Objective</button>
-                    <button class="btn btn-success" step-next="createObjective()">Finish</button>
-                  </div>
-                </div>
               </div>
             </div>
           </step>

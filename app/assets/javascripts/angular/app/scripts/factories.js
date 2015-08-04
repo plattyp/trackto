@@ -1,5 +1,6 @@
 function ObjectiveFactory($http) {
     var urlBase = '/api/objectives';
+    var timeZoneOffset = new Date().getTimezoneOffset() * -60;
     var objectiveFactory = {};
 
     objectiveFactory.getObjectives = function () {
@@ -8,6 +9,11 @@ function ObjectiveFactory($http) {
 
     objectiveFactory.getObjective = function(objectiveId) {
         return $http.get(urlBase + '/' + objectiveId);
+    };
+
+    objectiveFactory.getProgressTrendForObjective = function(objectiveId) {
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
+        return $http.get(urlBase + '/' + objectiveId + '/progress_trend?' + params);
     };
 
     objectiveFactory.createObjective = function (objective) {

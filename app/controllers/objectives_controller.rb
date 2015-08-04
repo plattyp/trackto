@@ -70,6 +70,13 @@ class ObjectivesController < ApiController
     end
   end
 
+  def progress_trend_for_objective
+    @progress = Progress.progress_overview_by_subobjective_by_timeframe(current_user.id, params[:objective_id], 'days',14, params[:timezoneOffsetSeconds])
+    respond_to do |format|
+      format.json {render json: @progress.to_json, status: 200, content_type: 'application/json'}
+    end
+  end
+
   def objectives_overview
     @details = {
       objectiveCount: Objective.objective_count_by_user(current_user),

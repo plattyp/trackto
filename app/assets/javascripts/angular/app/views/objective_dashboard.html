@@ -10,19 +10,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-info pull-right">Current</span>
-                    <h5>Subobjectives</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">{{objective.subobjective_count}}</h1>
-                    <small>Total</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-info pull-right">Total</span>
@@ -34,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-primary pull-right">Last 14 Days</span>
@@ -43,6 +31,49 @@
                 <div class="ibox-content">
                     <h1 class="no-margins">{{objective.longest_streak_last_14}}</h1>
                     <small>Consecutive day progress</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Breakdown</h5>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div ng-hide="showNoDataMessage()" class="noProgressChart">
+                        <p>No Progress Has Been Made Yet</p>
+                    </div>
+                    <canvas id="progressPieBreakdown" class="chart chart-pie" data="breakdownData" labels="breakdownLabels" legend="true" series="breakdownSeries"></canvas> 
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Progress Trend</h5>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div ng-hide="showNoDataMessage()" class="noProgressChart">
+                        <p>No Progress Has Been Made Yet</p>
+                    </div>
+                    <canvas id="progressTrendObjective" class="chart chart-line" data="progressTrendData" labels="progressTrendLabels" legend="true" series="progressTrendSeries"></canvas> 
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Subobjectives</h5>
+                </div>
+                <div class="ibox-content no-padding" ng-repeat="sub in subobjectives">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge badge-primary">{{sub.progress}}</span>
+                            {{sub.name}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

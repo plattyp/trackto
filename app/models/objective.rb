@@ -56,14 +56,47 @@ class Objective < ActiveRecord::Base
   end
 
   def get_longest_streak_for_a_subobjective_in_last_days(days)
-    streak = 0
-    self.subobjectives.each do |s|
-      newstreak = s.get_streak_in_last_days(days)
-      if newstreak > streak
-        streak = newstreak
-      end
+    query = ""
+    if days > 0
+      query = "SELECT
+              MAX(streak) AS streak
+              FROM
+              (
+              SELECT
+              date,
+              grp,
+              row_number() OVER (PARTITION BY sub_id, grp ORDER BY date) AS streak
+              FROM
+              (
+              SELECT
+              sub_id,
+              date,
+              date::date - '2000-01-01'::date - row_number() OVER (PARTITION BY sub_id ORDER BY date) as grp
+              FROM
+              (
+              SELECT
+              s.id AS sub_id,
+              to_char(p.created_at,'YYYY-MM-DD') AS date,
+              sum(p.amount) AS progress
+              FROM 
+                progresses p
+                join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+                join objectives o on s.objective_id = o.id
+              WHERE
+                o.id = " + id.to_s + "
+                AND p.created_at > (current_date - interval '" + days.to_s + " days')
+              GROUP BY
+                s.id,
+                to_char(p.created_at,'YYYY-MM-DD')
+              ) t ) s ) o"
     end
-    streak
+
+    streak = 0
+    if !query.blank?
+      results = ActiveRecord::Base.connection.execute(query)
+      streak = results[0]['streak'] || 0
+    end
+    return streak 
   end
 
   def is_archived?
