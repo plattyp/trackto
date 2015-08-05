@@ -8,11 +8,12 @@ function ObjectiveFactory($http) {
     };
 
     objectiveFactory.getObjective = function(objectiveId) {
-        return $http.get(urlBase + '/' + objectiveId);
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
+        return $http.get(urlBase + '/' + objectiveId + '?' + params);
     };
 
-    objectiveFactory.getProgressTrendForObjective = function(objectiveId) {
-        var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
+    objectiveFactory.getProgressTrendForObjective = function(objectiveId,timeFrame) {
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset + '&timeFrame=' + timeFrame;
         return $http.get(urlBase + '/' + objectiveId + '/progress_trend?' + params);
     };
 

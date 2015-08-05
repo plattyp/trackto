@@ -10,33 +10,47 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-info pull-right">Total</span>
-                    <h5>Subobjective Progress</h5>
+                    <h5>Progress</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">{{objective.sub_progress}}</h1>
-                    <small>Progress Amount</small>
+                    <small>Across Subobjectives</small>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-primary pull-right">Last 14 Days</span>
+                    <span class="label label-primary pull-right">{{objective.longest_streak.subobjective_name}}</span>
                     <h5>Longest Streak</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{objective.longest_streak_last_14}}</h1>
-                    <small>Consecutive day progress</small>
+                    <h1 class="no-margins">{{objective.longest_streak.streak}}</h1>
+                    <small>Days</small>
+                    <div class="stat-percent font-bold text-navy">{{objective.longest_streak.begin_date}} - {{objective.longest_streak.end_date}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-warning pull-right">{{objective.current_streak.subobjective_name}}</span>
+                    <h5>Current Streak</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{objective.current_streak.streak}}</h1>
+                    <small>Days</small>
+                    <div ng-show="objective.current_streak.subobjective_name" class="stat-percent font-bold text-warning">{{objective.current_streak.begin_date}} - Today</div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Breakdown</h5>
@@ -49,23 +63,31 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Progress Trend</h5>
+                    <h5 class="pull-left">Progress Trend</h5>
+                    <div class="btn-group pull-right">
+                        <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">{{activeTimeFrame}} <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-class="(activeTimeFrame=='Months') ? 'active' : ''"><a ng-click="changeProgressTimeFrame('Months')" href="#">Months</a></li>
+                            <li ng-class="(activeTimeFrame=='Weeks') ? 'active' : ''"><a ng-click="changeProgressTimeFrame('Weeks')" href="#">Weeks</a></li>
+                            <li ng-class="(activeTimeFrame=='Days') ? 'active' : ''"><a ng-click="changeProgressTimeFrame('Days')" href="#">Days</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="ibox-content no-padding">
                     <div ng-hide="showNoDataMessage()" class="noProgressChart">
                         <p>No Progress Has Been Made Yet</p>
                     </div>
-                    <canvas id="progressTrendObjective" class="chart chart-line" data="progressTrendData" labels="progressTrendLabels" legend="true" series="progressTrendSeries"></canvas> 
+                    <canvas id="progressTrendObjective" class="chart chart-bar" data="progressTrendData" labels="progressTrendLabels" legend="true" series="progressTrendSeries"></canvas> 
                 </div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Subobjectives</h5>
+                    <h5>Manage Subobjectives</h5>
                 </div>
                 <div class="ibox-content no-padding" ng-repeat="sub in subobjectives">
                     <ul class="list-group">

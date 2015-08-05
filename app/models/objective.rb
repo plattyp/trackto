@@ -29,14 +29,21 @@ class Objective < ActiveRecord::Base
     subobjectives
   end
 
-  def self.find_by_id_and_user(objectiveId, user)
-    objective = Objective.find_by_id(objectiveId)
-
-    if objective.user_id = user.id
-      return objective
-    else
-      return nil
-    end
+  def get_details(offsetseconds)
+    obj = self
+    {
+      id: obj.id,
+      name: obj.name,
+      description: obj.description,
+      subobjective_count: obj.get_subobjective_count,
+      obj_progress: obj.obj_progress,
+      sub_progress: obj.get_subobjectives_total_progress,
+      archived: obj.is_archived?,
+      longest_streak: obj.get_longest_subobjective_streak_all_time_with_metadata(offsetseconds),
+      current_streak: obj.get_current_subobjective_streak(offsetseconds),
+      created_at: obj.created_at,
+      updated_at: obj.updated_at
+    }
   end
 
   def get_subobjectives
@@ -47,6 +54,10 @@ class Objective < ActiveRecord::Base
     subobjectives
   end
 
+  def get_subobjective_count
+    self.subobjectives.size
+  end
+
   def get_subobjectives_total_progress
     total = 0
     self.subobjectives.each do |p|
@@ -55,48 +66,159 @@ class Objective < ActiveRecord::Base
     total
   end
 
-  def get_longest_streak_for_a_subobjective_in_last_days(days)
-    query = ""
-    if days > 0
-      query = "SELECT
-              MAX(streak) AS streak
-              FROM
-              (
-              SELECT
-              date,
+  def get_longest_subobjective_streak_all_time_with_metadata(offsetseconds)
+    query = "
+            WITH streak_data AS (
+            SELECT
+              sub_id,
+              date::date AS date,
               grp,
               row_number() OVER (PARTITION BY sub_id, grp ORDER BY date) AS streak
-              FROM
-              (
+            FROM
+            (
               SELECT
+                sub_id,
+                date,
+                date::date - '2000-01-01'::date - row_number() OVER (ORDER BY sub_id, date) as grp
+              FROM
+                (
+                  SELECT
+                    s.id AS sub_id,
+                    to_char((p.created_at + interval '" + offsetseconds.to_s + " seconds'),'YYYY-MM-DD') AS date,
+                    sum(p.amount) AS progress
+                  FROM 
+                    progresses p
+                    join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+                    join objectives o on s.objective_id = o.id
+                  WHERE
+                    o.id = " + id.to_s + "
+                  GROUP BY
+                    s.id,
+                    to_char((p.created_at + interval '" + offsetseconds.to_s + " seconds'),'YYYY-MM-DD')
+                ) t 
+              ) s
+            )
+            SELECT
               sub_id,
-              date,
-              date::date - '2000-01-01'::date - row_number() OVER (PARTITION BY sub_id ORDER BY date) as grp
-              FROM
+              max(streak) streak,
+              min(date) begin_date,
+              max(date) end_date
+            FROM
+              streak_data
+            WHERE
+            grp = 
               (
               SELECT
-              s.id AS sub_id,
-              to_char(p.created_at,'YYYY-MM-DD') AS date,
-              sum(p.amount) AS progress
-              FROM 
-                progresses p
-                join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
-                join objectives o on s.objective_id = o.id
+                MAX(grp) grp
+              FROM
+                streak_data
               WHERE
-                o.id = " + id.to_s + "
-                AND p.created_at > (current_date - interval '" + days.to_s + " days')
-              GROUP BY
-                s.id,
-                to_char(p.created_at,'YYYY-MM-DD')
-              ) t ) s ) o"
+                streak =
+                (
+                  SELECT
+                    MAX(streak) streak
+                  FROM
+                    streak_data
+                )
+              )
+            GROUP BY
+            sub_id"
+
+    results = ActiveRecord::Base.connection.execute(query)
+    mapped = {}
+    if !results.nil?
+      # Find more info on subobjective
+      sub_id = results[0]['sub_id']
+      sub = Subobjective.find(sub_id)
+      
+      mapped[:subobjective_id]   = sub_id
+      mapped[:subobjective_name] = sub.name
+      mapped[:streak]            = results[0]['streak']
+      mapped[:begin_date]        = results[0]['begin_date']
+      mapped[:end_date]          = results[0]['end_date']
     end
 
-    streak = 0
-    if !query.blank?
-      results = ActiveRecord::Base.connection.execute(query)
-      streak = results[0]['streak'] || 0
+    return mapped
+  end
+
+  def get_current_subobjective_streak(offsetseconds)
+    query = "
+            WITH streak_data AS (
+              SELECT
+                sub_id,
+                date::date AS date,
+                grp,
+                row_number() OVER (PARTITION BY sub_id, grp ORDER BY date) AS streak
+              FROM
+                (
+                  SELECT
+                    sub_id,
+                    date,
+                    date::date - '2000-01-01'::date - row_number() OVER (ORDER BY sub_id, date) as grp
+                    FROM
+                  (
+                  SELECT
+                    s.id AS sub_id,
+                    to_char((p.created_at + interval '" + offsetseconds.to_s + " seconds'),'YYYY-MM-DD') AS date,
+                    sum(p.amount) AS progress
+                  FROM 
+                    progresses p
+                    join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+                    join objectives o on s.objective_id = o.id
+                  WHERE
+                    o.id = " + id.to_s + "
+                  GROUP BY
+                    s.id,
+                    to_char((p.created_at + interval '" + offsetseconds.to_s + " seconds'),'YYYY-MM-DD')
+                  ) t 
+                ) s
+            )
+            SELECT
+              sub_id,
+              max(streak) streak,
+              min(date) begin_date,
+              max(date) end_date
+            FROM
+              streak_data
+            WHERE
+              grp = 
+            (
+              SELECT
+                max(grp)
+              FROM
+                streak_data
+              WHERE
+                date = (now() + interval '" + offsetseconds.to_s + " seconds')::date
+                AND streak = 
+                (
+                SELECT
+                  max(streak)
+                FROM
+                  streak_data
+                WHERE
+                  date = (now() + interval '" + offsetseconds.to_s + " seconds')::date
+                )
+            )
+            GROUP BY
+              sub_id"
+
+    results = ActiveRecord::Base.connection.execute(query)
+    mapped = {}
+    if results.any?
+      # Find more info on subobjective
+      sub_id = results[0]['sub_id']
+      sub = Subobjective.find(sub_id)
+      
+      mapped[:subobjective_id]   = sub_id
+      mapped[:subobjective_name] = sub.name
+      mapped[:streak]            = results[0]['streak']
+      mapped[:begin_date]        = results[0]['begin_date']
+      mapped[:end_date]          = results[0]['end_date']
+    else
+      mapped[:streak]            = 0
     end
-    return streak 
+
+    return mapped
   end
 
   def is_archived?

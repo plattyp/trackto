@@ -3,13 +3,9 @@
         <i class="fa fa-wrench"></i>
     </a>
     <ul class="dropdown-menu dropdown-user">
-        <li><a ng-click="deleteObjective()" href>Edit Objective</a>
-        </li>
-        <li ng-hide="isArchived()"><a ng-click="archiveObjective()" href>Archive Objective</a>
-        </li>
-        <li ng-show="isArchived()"><a ng-click="unarchiveObjective()" href>Unarchive Objective</a>
-        </li>
-        <li><a ng-click="deleteObjective()" href>Delete Objective</a>
-        </li>
+        <li><a ng-click="true" href>Edit Objective</a></li>
+        <li ng-hide="isArchived()"><a ng-click="archiveObjective()" href>Archive Objective</a></li>
+        <li ng-show="isArchived()"><a ng-click="unarchiveObjective()" href>Unarchive Objective</a></li>
+        <li><a ng-click="deleteObjective()" href>Delete Objective</a></li>
     </ul>
 </div>

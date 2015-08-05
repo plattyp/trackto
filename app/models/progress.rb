@@ -51,8 +51,9 @@ class Progress < ActiveRecord::Base
 
   def self.progress_overview_by_subobjective_by_timeframe(userId, objectiveId, timeframe, limit, offsetseconds)
     query = ""
-    if timeframe === 'days'
-      query = "SELECT 
+    if timeframe === 'Days'
+      query = "
+              SELECT 
               s.id AS subobjective_id,
               s.name AS subobjective,
               to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD') AS x,
@@ -71,6 +72,27 @@ class Progress < ActiveRecord::Base
               ORDER BY
               s.id,
               to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD')"
+    elsif timeframe === 'Weeks'
+      query = "
+              SELECT 
+              s.id AS subobjective_id,
+              s.name AS subobjective,
+              date_trunc('week', to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD')::timestamp)::date AS x,
+              sum(p.amount) AS progress
+              FROM progresses p
+              join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+              join objectives o on s.objective_id = o.id
+              WHERE
+              (p.created_at + interval '"+ offsetseconds.to_s + " seconds') > (current_date - interval '" + limit.to_s + " weeks')
+              AND o.user_id = " + userId.to_s + "
+              AND o.id = " + objectiveId.to_s + "
+              GROUP BY
+              s.id,
+              s.name,
+              date_trunc('week', to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD')::timestamp)::date
+              ORDER BY
+              s.id,
+              date_trunc('week', to_char(p.created_at + interval '"+ offsetseconds.to_s + " seconds','YYYY-MM-DD')::timestamp)::date"
     end
 
     if !query.blank?
@@ -79,7 +101,11 @@ class Progress < ActiveRecord::Base
       results.group_by{|s| s['subobjective']}.each do |k,v|
         values = {}
         v.each do |p|
-          values[p['x']] = p['progress']
+          if timeframe === 'Days'
+            values[p['x']] = p['progress']
+          elsif timeframe === 'Weeks'
+            values[return_formatted_week(p['x'])] = p['progress']
+          end
         end
         mappedresults[k] = values
       end
@@ -95,6 +121,22 @@ class Progress < ActiveRecord::Base
         progress << {id: p.id, amount: p.amount, type: "Subobjective", subobjective_id: p.progressable_id, updated_at: p.updated_at.to_s}
     end
     progress
+  end
+
+  private
+
+  def self.return_formatted_week(dateString)
+    date = Date.strptime(dateString, "%Y-%m-%d")
+    month = date.strftime("%B")
+    day = date.strftime("%d")
+
+    if (month === "June" || month === "July")
+      month = month
+    else
+      month = month[0,3]
+    end
+
+    return month + " " + day.to_s
   end
 
 end

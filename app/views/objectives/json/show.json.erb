@@ -1,15 +1,28 @@
 {"objective":
   {
-    "id": <%= @objective.id %>,
-    "name": "<%= @objective.name %>",
-    "description": "<%= @objective.description %>",
-    "subobjective_count": <%= @subobjectives.size %>,
-    "obj_progress": <%= @objective.obj_progress %>,
-    "sub_progress": <%= @objective.get_subobjectives_total_progress %>,
-    "archived": <%= @objective.is_archived? %>,
-    "longest_streak_last_14": <%= @objective.get_longest_streak_for_a_subobjective_in_last_days(14) %>,
-    "created_at": "<%= @objective.created_at %>",
-    "updated_at": "<%= @objective.updated_at %>"
+    "id": <%= @objective[:id] %>,
+    "name": "<%= @objective[:name] %>",
+    "description": "<%= @objective[:description] %>",
+    "subobjective_count": <%= @objective[:subobjective_count] %>,
+    "obj_progress": <%= @objective[:obj_progress] %>,
+    "sub_progress": <%= @objective[:sub_progress] %>,
+    "archived": <%= @objective[:archived] %>,
+    "longest_streak": {
+      "subobjective_id": <%= @objective[:longest_streak][:subobjective_id] %>,
+      "subobjective_name": "<%= @objective[:longest_streak][:subobjective_name] %>",
+      "streak": <%= @objective[:longest_streak][:streak] %>,
+      "begin_date": "<%= @objective[:longest_streak][:begin_date] %>",
+      "end_date": "<%= @objective[:longest_streak][:end_date] %>"
+    },
+    "current_streak": {
+      "subobjective_id": <%= @objective[:current_streak][:subobjective_id] || -1 %>,
+      "subobjective_name": "<%= @objective[:current_streak][:subobjective_name] %>",
+      "streak": <%= @objective[:current_streak][:streak] %>,
+      "begin_date": "<%= @objective[:current_streak][:begin_date] %>",
+      "end_date": "<%= @objective[:current_streak][:end_date] %>"
+    },
+    "created_at": "<%= @objective[:created_at] %>",
+    "updated_at": "<%= @objective[:updated_at] %>"
   },
   "subobjectives":
   [
