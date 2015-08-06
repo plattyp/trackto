@@ -1,12 +1,13 @@
 function ObjectiveDashboard($scope, DashboardFactory) {
-    getObjectivesOverview();
-    getProgressOverview();
     // To support dashboard metrics
     $scope.objectivesCount = 0;
     $scope.subobjectivesCount = 0;
     $scope.progressCount = 0;
 
     $scope.activeTimeFrame = 'Days';
+
+    getObjectivesOverview();
+    getProgressOverview();
 
     $scope.changeProgressTimeFrame = function(timeframe) {
         $scope.activeTimeFrame = timeframe;
@@ -40,7 +41,7 @@ function ObjectiveDashboard($scope, DashboardFactory) {
     });
 
     function getProgressOverview() {
-        DashboardFactory.getProgressOverview()
+        DashboardFactory.getProgressOverview($scope.activeTimeFrame)
             .success(function (prg) {
                 $scope.progress = prg['progress'];
                 reloadChartData();

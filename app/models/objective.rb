@@ -126,7 +126,7 @@ class Objective < ActiveRecord::Base
 
     results = ActiveRecord::Base.connection.execute(query)
     mapped = {}
-    if !results.nil?
+    if results.any?
       # Find more info on subobjective
       sub_id = results[0]['sub_id']
       sub = Subobjective.find(sub_id)
@@ -136,6 +136,9 @@ class Objective < ActiveRecord::Base
       mapped[:streak]            = results[0]['streak']
       mapped[:begin_date]        = results[0]['begin_date']
       mapped[:end_date]          = results[0]['end_date']
+    else
+      mapped[:subobjective_id]   = -1
+      mapped[:streak]            = 0
     end
 
     return mapped
@@ -215,6 +218,7 @@ class Objective < ActiveRecord::Base
       mapped[:begin_date]        = results[0]['begin_date']
       mapped[:end_date]          = results[0]['end_date']
     else
+      mapped[:subobjective_id]   = -1
       mapped[:streak]            = 0
     end
 

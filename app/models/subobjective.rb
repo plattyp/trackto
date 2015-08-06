@@ -29,7 +29,7 @@ class Subobjective < ActiveRecord::Base
   end
 
   def has_no_progress_today?
-    ((Time.zone.now - last_progress_on).to_i / 1.day) >= 1
+    Time.zone.now.strftime("%m/%d/%Y") != last_progress_on.strftime("%m/%d/%Y")
   end
 
   def get_streak_in_last_days(daylimit)

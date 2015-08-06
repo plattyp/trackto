@@ -124,6 +124,23 @@ function minimalizeSidebar($timeout) {
     };
 };
 
+function subobjectiveEditModal($timeout) {
+    return {
+        restrict: 'E',
+        transclude: true,
+        scope: {
+            submitCreateSubobjective: "&"
+        },
+        link: function(scope, element, attributes){
+            scope.modalId                  = attributes.modalId;
+            scope.modalTitle               = attributes.modalTitle;
+            scope.successButtonText        = attributes.successButtonText;
+            scope.submitCreateSubobjective = attributes.clickFn;
+        },
+        templateUrl: 'views/common/modal.html'
+    };
+};
+
 
 
 /**
@@ -137,3 +154,4 @@ angular
     .directive('iboxTools', iboxTools)
     .directive('objectiveHeader', objectiveHeader)
     .directive('minimalizeSidebar', minimalizeSidebar)
+    .directive('subobjectiveEditModal', subobjectiveEditModal)

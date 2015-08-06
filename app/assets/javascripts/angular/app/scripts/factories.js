@@ -49,8 +49,8 @@ function DashboardFactory($http) {
     var timeZoneOffset = new Date().getTimezoneOffset() * -60;
     dashboardFactory = {};
 
-    dashboardFactory.getProgressOverview = function() {
-        var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
+    dashboardFactory.getProgressOverview = function(timeFrame) {
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset + '&timeFrame=' + timeFrame;
         return $http.get(urlBase + 'progress_overview?' + params);
     }
 

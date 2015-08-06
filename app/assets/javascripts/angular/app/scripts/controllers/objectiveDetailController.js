@@ -15,6 +15,16 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
     $scope.progressTrendSeries = [];
     $scope.progressTrendData   = [];
 
+    // Create Subobjective Modal
+    $scope.createSubobjective = {
+        name: "",
+        description: ""
+    };
+
+    $scope.submitCreateSubobjective = function() {
+        console.log('Called!');
+    }
+
     getObjective($scope.selected_id);
     getObjectiveProgressTrend($scope.selected_id);
 
@@ -22,8 +32,22 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
         return $scope.objective.archived || false;
     }
 
-    $scope.showNoDataMessage = function() {
-        return $scope.breakdownData.length > 0;
+    $scope.hideNoDataMessage = function() {
+        return $scope.objective.sub_progress > 0;
+    }
+
+    $scope.longestStreakMessage = function() {
+        if ($scope.objective.hasOwnProperty("longest_streak")) {
+            return $scope.objective.longest_streak.begin_date + " - " + $scope.objective.longest_streak.end_date;
+        }
+        return "";
+    }
+
+    $scope.currentStreakMessage = function() {
+        if ($scope.objective.hasOwnProperty("current_streak")) {
+            return $scope.objective.current_streak.begin_date + " - Today";
+        }
+        return "";
     }
 
     function getObjective(objectiveId) {
@@ -137,6 +161,10 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
                     toastr.error("Unable to archive the objective", 'error');
                 }
             });
+    }
+
+    $scope.addSubobjective = function() {
+        console.log('Add Subobjective!');
     }
 };
 
