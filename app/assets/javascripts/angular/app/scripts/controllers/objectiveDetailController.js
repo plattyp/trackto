@@ -22,9 +22,24 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
     };
 
     $scope.submitCreateSubobjective = function() {
-        console.log('Called!');
+        if ($scope.createSubobjective.name) {
+            ObjectiveFactory.createSubobjective($scope.selected_id, $scope.createSubobjective)
+                .success(function (subobjective) {
+                    toastr.success("You have successfully create the subobjective: " + subobjective.name, 'Success');
+                    angular.element('#createSubModal').modal('hide');
+                    getObjective($scope.selected_id);
+                })
+                .error(function (error) {
+                    if (error) {
+                        toastr.error('Something went wrong and your subobjective could not be created', 'Error');
+                    }
+                });
+        } else {
+            toastr.error('A subobjective must have a name', 'Error');
+        }
     }
 
+    // Needed to kick it off on page load
     getObjective($scope.selected_id);
     getObjectiveProgressTrend($scope.selected_id);
 
@@ -68,8 +83,8 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
 
     function reloadBreakdownChartData() {
         var subs = $scope.subobjectives;
-        $scope.labels = [];
-        $scope.data = [];
+        $scope.breakdownLabels = [];
+        $scope.breakdownData = [];
         var data = [];
         for (var i in subs) {
             $scope.breakdownLabels.push(subs[i].name);

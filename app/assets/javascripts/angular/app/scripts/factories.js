@@ -3,6 +3,7 @@ function ObjectiveFactory($http) {
     var timeZoneOffset = new Date().getTimezoneOffset() * -60;
     var objectiveFactory = {};
 
+    // Methods for Objectives
     objectiveFactory.getObjectives = function () {
         return $http.get(urlBase);
     };
@@ -10,11 +11,6 @@ function ObjectiveFactory($http) {
     objectiveFactory.getObjective = function(objectiveId) {
         var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
         return $http.get(urlBase + '/' + objectiveId + '?' + params);
-    };
-
-    objectiveFactory.getProgressTrendForObjective = function(objectiveId,timeFrame) {
-        var params = 'timezoneOffsetSeconds=' + timeZoneOffset + '&timeFrame=' + timeFrame;
-        return $http.get(urlBase + '/' + objectiveId + '/progress_trend?' + params);
     };
 
     objectiveFactory.createObjective = function (objective) {
@@ -33,8 +29,19 @@ function ObjectiveFactory($http) {
         return $http.post(urlBase + '/' + objectiveId + '/unarchive');
     };
 
+    // Methods to support charts
     objectiveFactory.getSubobjectivesToday = function() {
         return $http.get('/api/subobjectives_today');
+    };
+
+    objectiveFactory.getProgressTrendForObjective = function(objectiveId,timeFrame) {
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset + '&timeFrame=' + timeFrame;
+        return $http.get(urlBase + '/' + objectiveId + '/progress_trend?' + params);
+    };
+
+    // Methods for Subobjectives
+    objectiveFactory.createSubobjective = function(objectiveId, subobjective) {
+        return $http.post('/api/subobjectives/', {"objective_id": objectiveId, "subobjective": subobjective});
     };
 
     objectiveFactory.addProgressSubobjective = function(subobjectiveId) {

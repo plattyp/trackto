@@ -129,13 +129,10 @@ function subobjectiveEditModal($timeout) {
         restrict: 'E',
         transclude: true,
         scope: {
+            modalId: "@",
+            modalTitle: "@",
+            successButtonText: "@",
             submitCreateSubobjective: "&"
-        },
-        link: function(scope, element, attributes){
-            scope.modalId                  = attributes.modalId;
-            scope.modalTitle               = attributes.modalTitle;
-            scope.successButtonText        = attributes.successButtonText;
-            scope.submitCreateSubobjective = attributes.clickFn;
         },
         templateUrl: 'views/common/modal.html'
     };
