@@ -32,21 +32,16 @@ module Trackto
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    initializer 'setup_asset_pipeline', :group => :all  do |app|
-      # We don't want the default of everything that isn't js or css, because it pulls too many things in
-      app.config.assets.precompile.shift
-
-      # Explicitly register the extensions we are interested in compiling
-      app.config.assets.precompile.push(Proc.new do |path|
-        File.extname(path).in? [
-          '.html', '.erb', '.haml',               
-          '.png',  '.gif', '.jpg', '.jpeg',       
-          '.eot',  '.otf', '.svc', '.woff', '.ttf'
-        ] && !File.extname(path).in? [
-          '.min.js.gzip'
-        ]
-      end)
-    end
+    precompile_whitelist = %w(
+      .html .erb .haml
+      .png  .jpg .gif .jpeg .ico
+      .eot  .otf .svc .woff .ttf
+      .svg
+    )
+    config.assets.precompile.shift
+    config.assets.precompile.unshift -> (path) {
+      (extension = File.extname(path)).present? and extension.in?(precompile_whitelist)
+    }
 
     config.autoload_paths += %W(#{config.root}/lib)
   end
