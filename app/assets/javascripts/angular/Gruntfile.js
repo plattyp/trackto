@@ -10,7 +10,8 @@ module.exports = function (grunt) {
     // Configurable paths for the app
     var appConfig = {
         app: 'app',
-        dist: 'dist'
+        //dist: 'dist'
+        dist: '../../../../public'
     };
 
     // Grunt configuration
@@ -236,4 +237,7 @@ module.exports = function (grunt) {
         'usemin',
         'htmlmin'
     ]);
+
+    // Build for heroku
+    grunt.registerTask('heroku:production', 'build');
 };
