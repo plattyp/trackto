@@ -1,0 +1,49 @@
+/* For Logo */
+.skin-3 .nav-header {
+    padding: 12px 25px 13px 25px !important;
+}
+
+.logo {
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    color:white;
+    display:block;
+    padding:0px 0px
+}
+
+.logo img {
+    content: url(../img/tracktosmaller.png);
+}
+
+/*
+.logo[max-width='70px'] img {
+    content: url(../img/tracktoCheckmark.png);
+}
+
+*/
+
+/* For Task Buttons */
+
+.task-actions {
+    transform: translateY(-20%);
+}
+
+.task-action-button {
+    outline: 0 !important;
+}
+
+/* Set Custom CSS for App*/
+
+.white-font {
+    color: #fff;
+}
+
+.noProgressChart {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
