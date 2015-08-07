@@ -35,7 +35,7 @@ Rails.application.configure do
   # Generate digests for assets URLs.
   config.assets.digest = true
 
-  config.assets.precompile = [ Proc.new{ |path| !File.extname(path).in?(['.js', '.css', '.map', '.gzip', '']) }, /application.(css|js)$/ ]
+  config.assets.precompile = [ Proc.new{ |path| !File.extname(path).in?(['.js', '.css', '.map', '.gzip']) }, /application.(css|js)$/ ]
 
   # `config.assets.precompile` has moved to config/initializers/assets.rb
 
