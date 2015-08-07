@@ -39,9 +39,11 @@ module Trackto
       # Explicitly register the extensions we are interested in compiling
       app.config.assets.precompile.push(Proc.new do |path|
         File.extname(path).in? [
-          '.html', '.erb', '.haml',                 # Templates
-          '.png',  '.gif', '.jpg', '.jpeg',         # Images
-          '.eot',  '.otf', '.svc', '.woff', '.ttf' # Fonts
+          '.html', '.erb', '.haml',               
+          '.png',  '.gif', '.jpg', '.jpeg',       
+          '.eot',  '.otf', '.svc', '.woff', '.ttf'
+        ] && !File.extname(path).in? [
+          '.min.js.gzip'
         ]
       end)
     end
