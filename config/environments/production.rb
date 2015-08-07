@@ -25,8 +25,8 @@ Rails.application.configure do
   config.serve_static_assets = false
 
   # Compress JavaScripts and CSS.
-  # config.assets.js_compressor = :uglifier
-  config.assets.js_compressor = Uglifier.new(output: {ascii_only: true})
+  config.assets.js_compressor = :uglifier
+
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -34,6 +34,8 @@ Rails.application.configure do
 
   # Generate digests for assets URLs.
   config.assets.digest = true
+
+  config.assets.precompile = [ Proc.new{ |path| !File.extname(path).in?(['.js', '.css', '.map', '.gzip']) }, /application.(css|js)$/ ]
 
   # `config.assets.precompile` has moved to config/initializers/assets.rb
 
