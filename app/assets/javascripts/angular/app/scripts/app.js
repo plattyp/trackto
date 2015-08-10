@@ -5,7 +5,5 @@
         'toastr',
         'chart.js',
         'angular-steps'
-        //'oc.lazyLoad',                  // ocLazyLoad
-        //'ngIdle'                        // Idle timer
     ])
 })();
