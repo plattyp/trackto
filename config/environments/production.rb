@@ -34,7 +34,7 @@ Rails.application.configure do
 
   #precompile_whitelist = ['.html', '.erb', '.haml','.png','.jpg','.gif','.jpeg','.ico','.eot','.otf','.svc','.woff','.ttf','.svg']
 
-  config.assets.precompile = [ Proc.new{ |path| !File.extname(path).in?(['.js', '.css', '.less', 'js.min.gzip']) }, /application.(css|js)$/, /LICENSE/ ]
+  config.assets.precompile = [ Proc.new{ |path| !File.extname(path).in?(['.js', '.css', '.less', 'js.min.gzip','']) }, /application.(css|js)$/ ]
 
   # Generate digests for assets URLs.
   config.assets.digest = true
