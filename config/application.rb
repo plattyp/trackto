@@ -38,9 +38,13 @@ module Trackto
       .eot  .otf .svc .woff .ttf
       .svg
     )
+
+    precompile_blacklist = %w(
+      .gzip
+    )
     config.assets.precompile.shift
     config.assets.precompile.unshift -> (path) {
-      (extension = File.extname(path)).present? and extension.in?(precompile_whitelist)
+      (extension = File.extname(path)).present? and extension.in?(precompile_whitelist) and !extension.in?(precompile_blacklist)
     }
 
     config.autoload_paths += %W(#{config.root}/lib)
