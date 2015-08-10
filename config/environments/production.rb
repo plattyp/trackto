@@ -32,17 +32,6 @@ Rails.application.configure do
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
-  precompile_whitelist = ['.html', '.erb', '.haml','.png','.jpg','.gif','.jpeg','.ico','.eot','.otf','.svc','.woff','.ttf','.svg']
-
-  config.assets.precompile << Proc.new do |path|
-    if path =~ /\.(css|js)\z/
-      true
-    else
-      false
-    end
-  end
-
-
   # Generate digests for assets URLs.
   config.assets.digest = true
 
