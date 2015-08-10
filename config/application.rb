@@ -40,7 +40,7 @@ module Trackto
     )
 
     precompile_blacklist = %w(
-      .gzip
+      .min.js.gzip
     )
     config.assets.precompile.shift
     config.assets.precompile.unshift -> (path) {
