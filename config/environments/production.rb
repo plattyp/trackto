@@ -34,7 +34,14 @@ Rails.application.configure do
 
   precompile_whitelist = ['.html', '.erb', '.haml','.png','.jpg','.gif','.jpeg','.ico','.eot','.otf','.svc','.woff','.ttf','.svg']
 
-  config.assets.precompile = [ Proc.new{ |path| File.extname(path).in?(precompile_whitelist) }, /application.(css|js)$/ ]
+  config.assets.precompile << Proc.new do |path|
+    if path =~ /\.(css|js)\z/
+      true
+    else
+      false
+    end
+  end
+
 
   # Generate digests for assets URLs.
   config.assets.digest = true
