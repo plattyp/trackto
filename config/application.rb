@@ -20,6 +20,8 @@ module Trackto
             :request_specs => true 
         g.fixture_replacement :factory_girl, :dir => "spec/factories" 
     end
+
+    config.assets.paths << "#{Rails.root}/client/bower_components"
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -31,21 +33,6 @@ module Trackto
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-
-    precompile_whitelist = %w(
-      .html .erb .haml
-      .png  .jpg .gif .jpeg .ico
-      .eot  .otf .svc .woff .ttf
-      .svg
-    )
-
-    precompile_blacklist = %w(
-      .min.js.gzip
-    )
-    config.assets.precompile.shift
-    config.assets.precompile.unshift -> (path) {
-      (extension = File.extname(path)).present? and extension.in?(precompile_whitelist) and !extension.in?(precompile_blacklist)
-    }
 
     config.autoload_paths += %W(#{config.root}/lib)
   end
