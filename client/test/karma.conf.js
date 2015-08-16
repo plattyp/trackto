@@ -33,6 +33,8 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/jquery-ui/jquery-ui.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
+      'bower_components/bootstrap/js/dropdown.js',
+      'bower_components/bootstrap/js/modal.js',
       'bower_components/metisMenu/dist/metisMenu.js',
       'bower_components/slimScroll/jquery.slimscroll.min.js',
       'bower_components/PACE/pace.js',
