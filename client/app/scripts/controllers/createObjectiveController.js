@@ -44,11 +44,18 @@ function CreateObjectiveController($scope, $window, toastr, StepsService, Object
         return $scope.objective.subobjectives_attributes.length > 1;
     };
 
-    $scope.showAddSubobjectiveButton = function() {
+    $scope.showAddSubobjectiveButton = function(isLast) {
+        //isLast is used to only show the button if the iteration is the last iteration
         var subs = $scope.objective.subobjectives_attributes;
         var shouldShow = true;
         for (var i in subs) {
+            // Check to ensure there are only valid subobjectives so far (All fields filled in)
             if (subs[i].name === "" && subs[i].description === "") {
+                shouldShow = false;
+            }
+        }
+        if (shouldShow) {
+            if (!isLast) {
                 shouldShow = false;
             }
         }

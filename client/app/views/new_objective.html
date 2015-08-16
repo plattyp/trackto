@@ -73,8 +73,8 @@
                             <textarea id="descriptionSubobjective" name="description" type="text" ng-model="sub.description" class="form-control"></textarea>
                         </div>
                         <a href ng-show="showRemoveSubobjectiveButton()" class="pull-left text-danger" ng-click="removeSub($index)">Remove Subobjective</a>
-                        <p ng-show="showRemoveSubobjectiveButton() && showAddSubobjectiveButton()" class="pull-left"> | </p>
-                        <a href ng-show="showAddSubobjectiveButton()" class="pull-left" ng-click="addAnotherSub()">Add Another</a>
+                        <p ng-show="showRemoveSubobjectiveButton() && showAddSubobjectiveButton($last)" class="pull-left"> | </p>
+                        <a href ng-show="showAddSubobjectiveButton($last)" class="pull-left" ng-click="addAnotherSub()">Add Another</a>
                       </tab>
                     </tabset>
                     <div class="pull-right">
