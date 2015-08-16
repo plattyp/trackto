@@ -33,14 +33,6 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
-      styles: {
-          files: ['app/less/**/*.less'],
-          tasks: ['less', 'copy:styles'],
-          options: {
-              nospawn: true,
-              livereload: '<%= connect.options.livereload %>'
-          },
-      },
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
@@ -73,19 +65,6 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
-    },
-
-    // Compile less to css
-    less: {
-        development: {
-            options: {
-                compress: true,
-                optimization: 2
-            },
-            files: {
-                "app/styles/style.css": "app/less/style.less"
-            }
-        }
     },
 
     // The actual grunt server settings
@@ -340,7 +319,9 @@ module.exports = function (grunt) {
     //   }
     // },
     // concat: {
-    //   dist: {}
+    //   dist: {
+    //     src: ['']
+    //   }
     // },
 
     imagemin: {

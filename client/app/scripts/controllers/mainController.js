@@ -1,5 +1,5 @@
 function MainCtrl($scope) {
-    this.logo = 'img/tracktosmaller.png';
+    this.logo = 'images/tracktosmaller.png';
 
     $scope.$on('tidyUp', function(event) {
         $scope.$broadcast('resetNav');
