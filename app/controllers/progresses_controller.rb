@@ -1,6 +1,4 @@
 class ProgressesController < ApiController
-  #Used temporarily until authentication is put into place
-  skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
   before_filter :find_context, except: :all_progress
 
   def all_progress

@@ -32,10 +32,11 @@ gem 'angularjs-rails'
 gem 'spring',        group: :development
 
 # For CORS interaction with Angular
-gem 'rack-cors'
+gem 'rack-cors', :require => 'rack/cors'
 
 gem 'devise'
-gem 'simple_token_authentication', '~> 1.0'
+gem 'omniauth'
+gem 'devise_token_auth'
 
 group :development, :test do 
 	gem 'rspec-rails' 

@@ -17,6 +17,7 @@
 
 # Ignore deployment rake tasks
 /lib/tasks/deploy.rake
+/config/secrets.yml
 
 # Ignore Bower & Grunt Files
 /app/assets/javascripts/angular/bower_components/*

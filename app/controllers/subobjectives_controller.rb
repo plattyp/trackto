@@ -1,10 +1,13 @@
 class SubobjectivesController < ApplicationController
-  #Used temporarily until authentication is put into place
-  skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
   before_filter :find_objective, except: :add_progress
+  before_filter :check_access, only: [:index, :show, :update, :add_progress]
 
   def index
     @subobjectives = Subobjective.all_subobjectives(@objective)
+  end
+
+  def show
+    @subobjective = Subobjective.find_by_id(params[:subobjective_id])
   end
 
   def create
@@ -15,6 +18,19 @@ class SubobjectivesController < ApplicationController
         format.json { render json: @subobjective.to_json, status: 200 }
       else
         format.json { render json: @subobjective.errors.to_json, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    @subobjective = Subobjective.find(params[:subobjective_id])
+    @subobjective.update(subobjective_params)
+
+    respond_to do |format|
+      if @subobjective.save
+        format.json { render json: @subobjective.to_json, status: 200 }
+      else
+        format.json { render json: @subobjective.errors.to_json, status: :unprocessable_entity}
       end
     end
   end
@@ -41,5 +57,24 @@ class SubobjectivesController < ApplicationController
 
   def find_objective
     @objective = Objective.find(params[:objective_id])
+  end
+
+  def check_access
+    objective    = Objective.find_by_id(params[:objective_id])
+    subobjective = Subobjective.find_by_id(params[:subobjective_id])
+
+    obj = objective || subobjective
+
+    if obj.nil?
+      respond_to do |format|
+        format.json { render json: {"error": "This objective/subobjective does not exist"}, status: 404, content_type: 'application/json' }
+      end
+    else
+      if obj.user.id != current_user.id
+        respond_to do |format|
+          format.json { render json: {"error": "You do not have access to this objective/subobjective"}, status: 401, content_type: 'application/json' }
+        end
+      end
+    end
   end
 end

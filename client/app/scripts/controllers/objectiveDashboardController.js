@@ -38,6 +38,7 @@ function ObjectiveDashboard($scope, DashboardFactory) {
 
     $scope.$on('resetProgressOverview', function(event) {
         getProgressOverview();
+        getObjectivesOverview();
     });
 
     function getProgressOverview() {

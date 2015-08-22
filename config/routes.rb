@@ -1,19 +1,9 @@
 Rails.application.routes.draw do
   scope :api, defaults: {format: :json} do
-
-  root 'objectives#index'
-  get 'all_progress', to: 'progresses#all_progress'
-
-  devise_for :users
-
-    devise_for :users, :skip => [:sessions, :registrations, :passwords]
-    devise_scope :user do
-      post 'login' => 'sessions#create', :as => :login
-      delete 'logout' => 'sessions#destroy', :as => :logout
-      post 'register' => 'registrations#create', :as => :register
-      delete 'delete_account' => 'registrations#destroy', :as => :delete_account
-    end
-
+    mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
+    
+    root 'objectives#index'
+    get 'all_progress', to: 'progresses#all_progress'
     get '/progress_overview' => "objectives#progress_overview", as: "progress_overview"
     get '/objectives_overview' => "objectives#objectives_overview", as: "objectives_overview"
     get '/subobjectives_today' => "objectives#subobjectives_today", as: "subobjectives_today"
@@ -22,7 +12,7 @@ Rails.application.routes.draw do
       post '/archive' => "objectives#archive", as: "archive"
       post '/unarchive' => "objectives#unarchive", as: "unarchive"
       get '/progress_trend' => "objectives#progress_trend_for_objective", as: 'progress_trend'
-      resources :subobjectives, only: [:index, :create]
+      #resources :subobjectives, only: [:index, :show, :create, :update]
       resources :progresses, only: [:index, :create]
     end
 

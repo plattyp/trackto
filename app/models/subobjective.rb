@@ -1,5 +1,6 @@
 class Subobjective < ActiveRecord::Base
   belongs_to :objective
+  delegate :user, :to => :objective, :allow_nil => true
   has_many :progresses, as: :progressable, :dependent => :destroy
 
   def self.all_subobjectives(objective)

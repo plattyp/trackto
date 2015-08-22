@@ -1,4 +1,4 @@
-function LoginController($scope, $window, toastr, UserFactory) {
+function LoginController($scope, $window, toastr, $auth, UserFactory) {
     $scope.message    = "";
     $scope.auth_token = "";
     $scope.isLogin = true;
@@ -23,43 +23,41 @@ function LoginController($scope, $window, toastr, UserFactory) {
     }
 
     $scope.login = function() {
-        console.log("Logging In!");
-        UserFactory.loginUser($scope.user)
-            .success(function(userObj) {
-                $window.sessionStorage.token = userObj.auth_token;
-                $window.location.href = '/';
-                $scope.clearInfo();
-            })
-            .error(function(errorObj) {
-                delete $window.sessionStorage.token;
-                toastr.error(errorObj.error, 'Error');
-                $scope.clearInfo();
-            })
+      $auth.submitLogin($scope.user)
+        .then(function(resp) {
+          $window.location.href = '/';
+          $scope.clearInfo();
+        })
+        .catch(function(resp) {
+          toastr.error(resp.errors[0], 'Error');
+          $scope.clearInfo();
+        });
     }
 
     $scope.signup = function() {
-        console.log("Signing Up!");
-        UserFactory.registerUser($scope.user)
-            .success(function(userObj) {
-                $scope.login();
+        var signupObj = $scope.user;
+        signupObj.password_confirmation = signupObj.password;
+        $auth.submitRegistration(signupObj)
+            .then(function(resp) {
+              $scope.clearInfo();
+              toastr.info('Please check your email to confirm your account', 'Confirmation Email');
             })
-            .error(function(errorObj) {
-                toastr.error(errorObj.error, 'Error');
-            })
+            .catch(function(resp) {
+              toastr.error(resp.errors[0], 'Error');
+            });
     }
 
     $scope.logout = function() {
-        UserFactory.logoutUser()
-            .success(function(obj){
-                delete $window.sessionStorage.token;
-                $window.location.href = '#/login';
-            })
-            .error(function(errorObj){
-                $scope.message = errorObj.message;
-            })
+      $auth.signOut()
+        .then(function(resp) {
+          $window.location.href = '#/login';
+        })
+        .catch(function(resp) {
+          toastr.error(resp.errors[0], 'Error');
+        });
     }
 };
 
 angular
     .module('trackto')
-    .controller('LoginController', ['$scope', '$window', 'toastr', 'UserFactory', LoginController])
+    .controller('LoginController', ['$scope', '$window', 'toastr', '$auth', 'UserFactory', LoginController])

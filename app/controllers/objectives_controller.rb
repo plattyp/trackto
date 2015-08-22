@@ -1,6 +1,4 @@
 class ObjectivesController < ApiController
-  #Used temporarily until authentication is put into place
-  skip_before_filter :verify_authenticity_token, if: Proc.new { |c| c.request.format == 'application/json' }
   before_filter :check_access, only: [:show,:destroy,:progress_trend_for_objective,:archive,:unarchive]
 
   def index
@@ -12,8 +10,11 @@ class ObjectivesController < ApiController
   end
 
   def show
+    # if offset seconds were passed in then use them otherwise default to -18000
+    timezoneOffsetSeconds = params[:timezoneOffsetSeconds] || -18000
+    
     @obj           = Objective.find_by_id(params[:id])
-    @objective     = @obj.get_details(params[:timezoneOffsetSeconds]) if !@obj.nil?
+    @objective     = @obj.get_details(timezoneOffsetSeconds) if !@obj.nil?
     @subobjectives = @obj.get_subobjectives if !@obj.nil?
 
     respond_to do |format|
