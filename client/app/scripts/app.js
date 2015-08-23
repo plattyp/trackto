@@ -1,4 +1,5 @@
 (function () {
+    "use strict";
     angular.module('trackto', [
         'ui.router',
         'toastr',
@@ -33,7 +34,7 @@
         },
         parseExpiry: function(headers) {
           // convert from UTC ruby (seconds) to UTC js (milliseconds)
-          return (parseInt(headers['expiry']) * 1000) || null;
+          return (parseInt(headers.expiry) * 1000) || null;
         },
         handleLoginResponse: function(response) {
           return response.data;

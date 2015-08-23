@@ -1,5 +1,6 @@
 /* Router */
 function config($stateProvider, $urlRouterProvider) {
+    "use strict";
     $urlRouterProvider.otherwise("/index/dashboard");
 
     $stateProvider
@@ -46,7 +47,8 @@ function config($stateProvider, $urlRouterProvider) {
 angular
     .module('trackto')
     .config(config)
-    .run(function ($rootScope, $state, $log) {
+    .run(function ($rootScope, $state) {
+      "use strict";
       $rootScope.$on('$stateChangeError', function () {
         // Redirect user to our login page
         $state.go('login');
