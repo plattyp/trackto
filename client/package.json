@@ -31,8 +31,7 @@
     "jit-grunt": "^0.9.1",
     "jshint-stylish": "^1.0.0",
     "load-grunt-tasks": "^0.6.0",
-    "time-grunt": "^1.0.0",
-    "uglify-js": "^2.4.24"
+    "time-grunt": "^1.0.0"
   },
   "engines": {
     "node": ">=0.10.0"
