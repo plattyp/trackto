@@ -37,6 +37,11 @@
 
 /* Set Custom CSS for App*/
 
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
 .white-font {
     color: #fff;
 }

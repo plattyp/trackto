@@ -43,14 +43,21 @@ function config($stateProvider, $urlRouterProvider) {
             url: "/login",
             templateUrl: "views/login.html",
         })
+        .state('index.password_reset', {
+            url: "/password_reset",
+            templateUrl: "views/password_reset.html",
+        })
 }
 angular
     .module('trackto')
     .config(config)
-    .run(function ($rootScope, $state) {
-      "use strict";
-      $rootScope.$on('$stateChangeError', function () {
-        // Redirect user to our login page
-        $state.go('login');
-      });
+    .run(function ($rootScope, $state, $location) {
+        "use strict";
+        $rootScope.$on('$stateChangeError', function () {
+            // Redirect user to our login page
+            $state.go('login');
+        });
+        $rootScope.$on('auth:password-reset-confirm-success', function() {
+          $state.go('index.password_reset');
+        });
     });

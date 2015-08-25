@@ -68,29 +68,7 @@ function DashboardFactory($http) {
     return dashboardFactory;
 }
 
-function UserFactory($http) {
-    var urlBase = '/api/';
-    var userFactory = {};
-
-    userFactory.loginUser = function(userObj) {
-        var params = 'user[email]=' + userObj.email + '&user[password]=' + userObj.password;
-        return $http.post(urlBase + 'login?' + params);   
-    };
-
-    userFactory.registerUser = function(userObj) {
-        var params = 'user[email]=' + userObj.email + '&user[password]=' + userObj.password;
-        return $http.post(urlBase + 'register?' + params);   
-    };
-
-    userFactory.logoutUser = function(userObj) {
-        return $http.delete(urlBase + 'logout');
-    };
-
-    return userFactory;
-};
-
 angular
     .module('trackto')
     .factory('ObjectiveFactory', ['$http', ObjectiveFactory])
-    .factory('UserFactory', ['$http', UserFactory])
     .factory('DashboardFactory', ['$http', DashboardFactory])

@@ -1,4 +1,4 @@
-function LoginController($scope, $window, toastr, $auth, UserFactory) {
+function LoginController($scope, $window, toastr, $auth) {
     $scope.message    = "";
     $scope.auth_token = "";
     $scope.isLogin = true;
@@ -7,12 +7,24 @@ function LoginController($scope, $window, toastr, $auth, UserFactory) {
         password: ""
     };
 
+    $scope.pwdResetForm = {
+      email: ""
+    };
+
+    $scope.pwdUpdateForm = {
+      password: "",
+      password_confirmation: ""
+    }
+
+    $scope.showForgotPassword = false;
+
     $scope.changeToSignup = function() {
         $scope.isLogin = false;
     }
 
     $scope.changeToLogin = function() {
-        $scope.isLogin = true;
+      $scope.showForgotPassword = false;
+      $scope.isLogin = true;
     }
 
     $scope.clearInfo = function() {
@@ -20,6 +32,10 @@ function LoginController($scope, $window, toastr, $auth, UserFactory) {
             email: "",
             password: ""
         };
+    }
+
+    $scope.changeToShowForgotPassword = function(status) {
+      $scope.showForgotPassword = status;
     }
 
     $scope.login = function() {
@@ -47,6 +63,27 @@ function LoginController($scope, $window, toastr, $auth, UserFactory) {
             });
     }
 
+    $scope.resetPassword = function() {
+      $auth.requestPasswordReset($scope.pwdResetForm)
+        .then(function(resp) {
+          toastr.info('Please check your email to reset your password', 'Email Sent');
+        })
+        .catch(function(resp) {
+          // handle error response
+        });
+    }
+
+    $scope.updatePassword = function() {
+      $auth.updateAccount($scope.pwdUpdateForm)
+        .then(function(resp) {
+          console.log(resp)
+          toastr.success('Your password has been updated', 'Success');
+        })
+        .catch(function(resp) {
+          toastr.error('Something wen\'t wrong updating your account', 'Error');
+        });
+    }
+
     $scope.logout = function() {
       $auth.signOut()
         .then(function(resp) {
@@ -60,4 +97,4 @@ function LoginController($scope, $window, toastr, $auth, UserFactory) {
 
 angular
     .module('trackto')
-    .controller('LoginController', ['$scope', '$window', 'toastr', '$auth', 'UserFactory', LoginController])
+    .controller('LoginController', ['$scope', '$window', 'toastr', '$auth', LoginController])
