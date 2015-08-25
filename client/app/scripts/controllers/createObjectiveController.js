@@ -104,7 +104,7 @@ function CreateObjectiveController($scope, $window, toastr, StepsService, Object
         var objective = cleanObjective();
         ObjectiveFactory.createObjective(objective)
             .success(function(obj) {
-                $window.location.href = '/#/index/objectives/' + obj['id'];
+                $window.location.href = '/#/objectives/' + obj['id'];
                 toastr.success("You successfully created an objective", 'Success');
                 $scope.$emit('tidyUp');
                 clearObjectiveFields();

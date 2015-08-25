@@ -117,6 +117,8 @@ class ObjectivesController < ApiController
     @objective = Objective.find(params[:objective_id])
     @objective.archived = option
 
+    puts @objective.to_json
+
     respond_to do |format|
       if @objective.save
         format.json { render json: @objective.to_json, status: 200, content_type: 'application/json' }

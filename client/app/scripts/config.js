@@ -1,12 +1,12 @@
 /* Router */
 function config($stateProvider, $urlRouterProvider) {
     "use strict";
-    $urlRouterProvider.otherwise("/index/dashboard");
+    $urlRouterProvider.otherwise("/dashboard");
 
     $stateProvider
         .state('index', {
             abstract: true,
-            url: "/index",
+            url: "",
             templateUrl: "views/common/content.html",
             resolve: {
               auth: function($auth) {
