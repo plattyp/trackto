@@ -1,5 +1,5 @@
 class ObjectivesController < ApiController
-  before_filter :check_access, only: [:show,:destroy,:progress_trend_for_objective,:archive,:unarchive]
+  before_filter :check_access, only: [:show,:destroy,:progress_trend_for_objective,:archive,:unarchive, :update]
 
   def index
     @objectives = Objective.objectives_with_progress(current_user)
@@ -45,6 +45,16 @@ class ObjectivesController < ApiController
         format.json { render json: @objective.to_json, status: 200 }
       else
         format.json { render json: @objective.errors.to_json, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @obj.update(objective_params)
+        format.json { render json: @obj.to_json, status: 200 }
+      else
+        format.json { render json: @obj.errors.to_json, status: :unprocessable_entity }
       end
     end
   end
@@ -135,13 +145,14 @@ class ObjectivesController < ApiController
   private
 
   def check_access
-    obj = Objective.find_by_id(params[:objective_id] || params[:id])
-    if obj.nil?
+    id = params[:objective_id] || params[:id]
+    @obj = Objective.find_by_id(id)
+    if @obj.nil?
       respond_to do |format|
         format.json { render json: {"error": "This objective does not exist"}, status: 404, content_type: 'application/json' }
       end
     else
-      if obj.user_id != current_user.id
+      if @obj.user_id != current_user.id
         respond_to do |format|
           format.json { render json: {"error": "You do not have access to this objective"}, status: 401, content_type: 'application/json' }
         end

@@ -12,7 +12,6 @@ Rails.application.routes.draw do
       post '/archive' => "objectives#archive", as: "archive"
       post '/unarchive' => "objectives#unarchive", as: "unarchive"
       get '/progress_trend' => "objectives#progress_trend_for_objective", as: 'progress_trend'
-      #resources :subobjectives, only: [:index, :show, :create, :update]
       resources :progresses, only: [:index, :create]
     end
 

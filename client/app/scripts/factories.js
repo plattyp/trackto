@@ -29,6 +29,10 @@ function ObjectiveFactory($http) {
         return $http.post(urlBase + '/' + objectiveId + '/unarchive');
     };
 
+    objectiveFactory.updateObjective = function(objectiveId, objective) {
+        return $http.put(urlBase + '/' + objectiveId, {"objective": objective});
+    };
+
     // Methods to support charts
     objectiveFactory.getSubobjectivesToday = function() {
         return $http.get('/api/subobjectives_today');

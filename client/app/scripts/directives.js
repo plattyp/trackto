@@ -138,6 +138,20 @@ function subobjectiveEditModal($timeout) {
     };
 };
 
+function objectiveEditModal($timeout) {
+    return {
+        restrict: 'E',
+        transclude: true,
+        scope: {
+            modalId: "@",
+            modalTitle: "@",
+            successButtonText: "@",
+            submitCreateSubobjective: "&"
+        },
+        templateUrl: 'views/common/modal.html'
+    };
+};
+
 
 
 /**
@@ -152,3 +166,4 @@ angular
     .directive('objectiveHeader', objectiveHeader)
     .directive('minimalizeSidebar', minimalizeSidebar)
     .directive('subobjectiveEditModal', subobjectiveEditModal)
+    .directive('objectiveEditModal', objectiveEditModal)

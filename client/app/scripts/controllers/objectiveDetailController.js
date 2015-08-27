@@ -21,6 +21,12 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
         description: ""
     };
 
+    // Edit Objective Modal
+    $scope.editObjective = {
+        name: "",
+        description: ""
+    }
+
     $scope.submitCreateSubobjective = function() {
         if ($scope.createSubobjective.name) {
             ObjectiveFactory.createSubobjective($scope.selected_id, $scope.createSubobjective)
@@ -37,6 +43,21 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
         } else {
             toastr.error('A subobjective must have a name', 'Error');
         }
+    }
+
+    $scope.submitEditObjective = function() {
+        ObjectiveFactory.updateObjective($scope.selected_id,$scope.editObjective)
+            .success(function(objective){
+                toastr.success("You have successfully updated the objective: " + objective.name, 'Success');
+                angular.element('#editObjectiveModal').modal('hide');
+                getObjective($scope.selected_id);
+                $scope.$emit('tidyUp');
+            })
+            .error(function(error) {
+                if (error) {
+                    toastr.error('Something went wrong and your objective could not be updated', 'Error');
+                }
+            })
     }
 
     // Needed to kick it off on page load
@@ -70,6 +91,10 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
             .success(function (obj) {
                 $scope.objective = obj['objective'];
                 $scope.subobjectives = obj['subobjectives'];
+
+                // Set Info For Editing
+                $scope.editObjective.name        = $scope.objective.name
+                $scope.editObjective.description = $scope.objective.description
                 if (Object.keys($scope.subobjectives).length > 0) {
                     reloadBreakdownChartData();
                 }
