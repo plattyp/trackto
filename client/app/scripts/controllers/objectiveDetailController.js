@@ -21,8 +21,13 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
         description: ""
     };
 
-    // Edit Objective Modal
+    // Edit Modals
     $scope.editObjective = {
+        name: "",
+        description: ""
+    }
+
+    $scope.editSubobjective = {
         name: "",
         description: ""
     }
@@ -56,6 +61,20 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
             .error(function(error) {
                 if (error) {
                     toastr.error('Something went wrong and your objective could not be updated', 'Error');
+                }
+            })
+    }
+
+    $scope.submitEditSubobjective = function() {
+        ObjectiveFactory.updateSubobjective($scope.editSubobjective)
+            .success(function(subobjective){
+                toastr.success("You have successfully updated the subobjective: " + subobjective.name, 'Success');
+                angular.element('#editSubobjectiveModal').modal('hide');
+                getObjective($scope.selected_id);
+            })
+            .error(function(error) {
+                if (error) {
+                    toastr.error('Something went wrong and your subobjective could not be updated', 'Error');
                 }
             })
     }
@@ -104,6 +123,22 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
                     $scope.status = 'Unable to load objectives data: ' + error.message;
                 }
             });
+    }
+
+    $scope.editSubobjective = function(subobjectiveId) {
+        getSubobjective(subobjectiveId);
+    }
+
+    function getSubobjective(subobjectiveId) {
+        ObjectiveFactory.getSubobjective(subobjectiveId)
+            .success(function(sub) {
+                $scope.editSubobjective = sub;
+            })
+            .error(function(error) {
+                if (error) {
+                    $scope.status = 'Unable to load objectives data: ' + error.message;
+                }
+            })
     }
 
     function reloadBreakdownChartData() {

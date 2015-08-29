@@ -44,12 +44,20 @@ function ObjectiveFactory($http) {
     };
 
     // Methods for Subobjectives
+    objectiveFactory.getSubobjective = function(subobjectiveId) {
+        return $http.get('/api/subobjectives/' + subobjectiveId);
+    };
+
     objectiveFactory.createSubobjective = function(objectiveId, subobjective) {
         return $http.post('/api/subobjectives/', {"objective_id": objectiveId, "subobjective": subobjective});
     };
 
     objectiveFactory.addProgressSubobjective = function(subobjectiveId) {
         return $http.post('/api/subobjectives/' + subobjectiveId + '/add_progress');
+    };
+
+    objectiveFactory.updateSubobjective = function(subobjective) {
+        return $http.put('/api/subobjectives/' + subobjective.id, {"subobjective": subobjective});
     };
 
     return objectiveFactory;
