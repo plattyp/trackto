@@ -18,13 +18,6 @@
     content: url(../images/tracktosmaller.png);
 }
 
-/*
-.logo[max-width='70px'] img {
-    content: url(../img/tracktoCheckmark.png);
-}
-
-*/
-
 /* For Task Buttons */
 
 .task-actions {
@@ -53,4 +46,13 @@
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
+}
+
+.progressSlider {
+    width: 200px;
+    margin-left: 25px;
+}
+
+.updateProgressBtn {
+    margin-left: 25px;
 }

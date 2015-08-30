@@ -3,7 +3,11 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>{{objective.name}}</h5> <span class="label label-success">{{objective.obj_progress}}%</span>
+                    <h5>{{objective.name}}</h5><span class="label label-success">{{editObjective.progress}}%</span>
+                    <span ng-show="showSlider">
+                        <div class="progressSlider pull-left" no-ui-slider='progressSliderOptions' ng-model='editObjective.progress'></div>
+                        <button type="button" class="btn btn-primary btn-xs pull-left updateProgressBtn" ng-click="submitUpdateObjectiveProgress()">Update</button>
+                    </span>
                     <div objective-header></div>
                 </div>
             </div>

@@ -161,6 +161,6 @@ class ObjectivesController < ApiController
   end
 
   def objective_params
-    params.require(:objective).permit(:name,:description, subobjectives_attributes: [:id, :name, :description])
+    params.require(:objective).permit(:name,:description, :progress, subobjectives_attributes: [:id, :name, :description])
   end
 end

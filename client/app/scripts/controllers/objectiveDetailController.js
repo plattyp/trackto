@@ -24,12 +24,42 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
     // Edit Modals
     $scope.editObjective = {
         name: "",
-        description: ""
+        description: "",
+        progress: 0
     }
 
     $scope.editSubobjective = {
         name: "",
         description: ""
+    }
+
+    // Objective Progress Slider
+    $scope.showSlider = false;
+    $scope.progressSliderOptions = {
+        range: {min: 0, max: 100},
+        connect: 'lower',
+        step: 5
+    };
+
+    $scope.showProgressSlider = function() {
+        $scope.showSlider = true;
+    }
+
+    function hideProgressSlider() {
+        $scope.showSlider = false;
+    }
+
+    $scope.submitUpdateObjectiveProgress = function() {
+        ObjectiveFactory.updateObjective($scope.selected_id,$scope.editObjective)
+            .success(function(objective){
+                toastr.success("You have successfully updated the objective: " + objective.name, 'Success');
+                hideProgressSlider();
+            })
+            .error(function(error) {
+                if (error) {
+                    toastr.error('Something went wrong and your objective could not be updated', 'Error');
+                }
+            })
     }
 
     $scope.submitCreateSubobjective = function() {
@@ -114,6 +144,7 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
                 // Set Info For Editing
                 $scope.editObjective.name        = $scope.objective.name
                 $scope.editObjective.description = $scope.objective.description
+                $scope.editObjective.progress    = $scope.objective.obj_progress
                 if (Object.keys($scope.subobjectives).length > 0) {
                     reloadBreakdownChartData();
                 }

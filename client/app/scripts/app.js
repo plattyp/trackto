@@ -5,7 +5,8 @@
         'toastr',
         'chart.js',
         'angular-steps',
-        'ng-token-auth'
+        'ng-token-auth',
+        'ya.nouislider'
     ])
     // For authentication
     .config(function($authProvider) {
