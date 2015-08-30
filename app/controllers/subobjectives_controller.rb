@@ -13,6 +13,7 @@ class SubobjectivesController < ApplicationController
   end
 
   def create
+    @objective    = Objective.find_by_id(params[:objective_id])
     @subobjective = @objective.subobjectives.build(subobjective_params)
 
     respond_to do |format|
