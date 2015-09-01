@@ -109,6 +109,18 @@ function ObjectiveDetailCtrl($scope, $stateParams, $window, toastr, ObjectiveFac
             })
     }
 
+    $scope.addProgress = function(subobjectiveId) {
+        ObjectiveFactory.addProgressSubobjective(subobjectiveId)
+            .success(function (subobjective) {
+                getObjective($scope.selected_id);
+                getObjectiveProgressTrend($scope.selected_id);
+                toastr.success("Progress has been added to the subobjective", 'Success');
+            })
+            .error(function (error) {
+                toastr.error("Unable to add progress to the subojective", 'error');
+            });
+    }
+
     // Needed to kick it off on page load
     getObjective($scope.selected_id);
     getObjectiveProgressTrend($scope.selected_id);

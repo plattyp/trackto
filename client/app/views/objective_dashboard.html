@@ -84,7 +84,8 @@
                 <div class="ibox-content no-padding" ng-repeat="sub in subobjectives">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <button type="button" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#editSubobjectiveModal" ng-click="editSubobjective(sub.id)"><i class="fa fa-wrench"></i></button>
+                            <button type="button" class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#editSubobjectiveModal" title="Edit Subobjective" ng-click="editSubobjective(sub.id)"><i class="fa fa-wrench"></i></button>
+                            <button type="button" class="btn btn-primary btn-xs pull-right addProgressButtonSub" title="Add Progress" ng-click="addProgress(sub.id)"><i class="fa fa-check"></i></button>
                             {{sub.name}}
                         </li>
                     </ul>

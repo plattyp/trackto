@@ -16,6 +16,12 @@
 
 .logo img {
     content: url(../images/tracktosmaller.png);
+    /*content: url(../images/tracktoCheckmark.png);*/
+}
+
+.skin-3.mini-navbar .logo img {
+    padding: 8px 0px !important;
+    content: url(../images/tracktoCheckmark.png);
 }
 
 /* For Task Buttons */
@@ -55,4 +61,8 @@
 
 .updateProgressBtn {
     margin-left: 15px;
+}
+
+.addProgressButtonSub {
+    margin-right: 5px;
 }
