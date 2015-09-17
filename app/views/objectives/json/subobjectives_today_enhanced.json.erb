@@ -1,0 +1,17 @@
+{"subobjectives":
+  [
+  <% @subobjectives.each do |o| %>
+  {
+    "id": <%= o[:id] %>,
+    "name": "<%= o[:name] %>",
+    "description": "<%= o[:description] %>",
+    "objective_id": "<%= o[:objective_id] %>",
+    "objective_name": "<%= o[:objective_name] %>",
+    "sub_progress": <%= o[:sub_progress] %>,
+    "streak": <%= o[:current_streak][:streak] %>,
+    "streak_begin_date": "<%= o[:current_streak][:begin_date] %>",
+    "streak_end_date": "<%= o[:current_streak][:end_date] %>"
+  }<%= ',' unless @subobjectives.last == o %>
+  <% end %>
+  ]
+}
