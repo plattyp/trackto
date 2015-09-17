@@ -123,6 +123,16 @@ class ObjectivesController < ApiController
     end
   end
 
+  def subobjectives_today_enhanced
+    # if offset seconds were passed in then use them otherwise default to -18000
+    timezoneOffsetSeconds = params[:timezoneOffsetSeconds] || -18000
+
+    @subobjectives = Objective.get_all_subobjectives_not_progressed_today_with_detail(current_user,timezoneOffsetSeconds)
+    respond_to do |format|
+      format.json { render 'objectives/json/subobjectives_today_enhanced.json.erb', status: 200, content_type: 'application/json' }
+    end
+  end
+
   def archive(option = true)
     @objective = Objective.find(params[:objective_id])
     @objective.archived = option

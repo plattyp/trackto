@@ -75,6 +75,87 @@ class Subobjective < ActiveRecord::Base
     return streak
   end
 
+  def get_current_subobjective_streak(offsetseconds)
+    query = "
+            WITH streak_data AS (
+              SELECT
+                sub_id,
+                date::date AS date,
+                grp,
+                row_number() OVER (PARTITION BY sub_id, grp ORDER BY date) AS streak
+              FROM
+                (
+                  SELECT
+                    sub_id,
+                    date,
+                    date::date - '2000-01-01'::date - row_number() OVER (ORDER BY sub_id, date) as grp
+                    FROM
+                  (
+                  SELECT
+                    s.id AS sub_id,
+                    to_char((p.created_at + interval '" + offsetseconds.to_s + " seconds'),'YYYY-MM-DD') AS date,
+                    sum(p.amount) AS progress
+                  FROM 
+                    progresses p
+                    join subobjectives s on p.progressable_id = s.id and p.progressable_type = 'Subobjective'
+                    join objectives o on s.objective_id = o.id
+                  WHERE
+                    s.id = " + id.to_s + "
+                  GROUP BY
+                    s.id,
+                    to_char((p.created_at + interval '" + offsetseconds.to_s + " seconds'),'YYYY-MM-DD')
+                  ) t 
+                ) s
+            )
+            SELECT
+              sub_id,
+              max(streak) streak,
+              min(date) begin_date,
+              max(date) end_date
+            FROM
+              streak_data
+            WHERE
+              grp = 
+            (
+              SELECT
+                max(grp)
+              FROM
+                streak_data
+              WHERE
+                date = (now() + interval '" + offsetseconds.to_s + " seconds')::date
+                AND streak = 
+                (
+                SELECT
+                  max(streak)
+                FROM
+                  streak_data
+                WHERE
+                  date = (now() + interval '" + offsetseconds.to_s + " seconds')::date
+                )
+            )
+            GROUP BY
+              sub_id"
+
+    results = ActiveRecord::Base.connection.execute(query)
+    mapped = {}
+    if results.any?
+      # Find more info on subobjective
+      sub_id = results[0]['sub_id']
+      sub = Subobjective.find(sub_id)
+      
+      mapped[:subobjective_id]   = sub_id
+      mapped[:subobjective_name] = sub.name
+      mapped[:streak]            = results[0]['streak']
+      mapped[:begin_date]        = results[0]['begin_date']
+      mapped[:end_date]          = results[0]['end_date']
+    else
+      mapped[:subobjective_id]   = -1
+      mapped[:streak]            = 0
+    end
+
+    return mapped
+  end
+
   private
 
   def most_recent_progress

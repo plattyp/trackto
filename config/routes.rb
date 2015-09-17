@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get '/progress_overview' => "objectives#progress_overview", as: "progress_overview"
     get '/objectives_overview' => "objectives#objectives_overview", as: "objectives_overview"
     get '/subobjectives_today' => "objectives#subobjectives_today", as: "subobjectives_today"
+    get '/subobjectives_today_enhanced' => "objectives#subobjectives_today_enhanced", as: "subobjectives_today_enhanced"
 
     resources :objectives do
       post '/archive' => "objectives#archive", as: "archive"
