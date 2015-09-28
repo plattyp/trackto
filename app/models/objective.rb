@@ -17,6 +17,19 @@ class Objective < ActiveRecord::Base
     objectives
   end
 
+  def self.objectives_with_subobjective_summary(user)
+    objectives = []
+    user.objectives.recent_objectives.each do |p|
+      subobjectives = []
+      p.subobjectives.each do |s|
+        last_progress = Date.today.year - s.last_progress_on.year > 500 ? "Never" : s.last_progress_on
+        subobjectives << {id: s.id, name: s.name, last_progress_date: last_progress }
+      end
+      objectives << {id: p.id, name: p.name, archived: p.is_archived?, subobjectives: subobjectives}
+    end
+    objectives
+  end
+
   def self.get_all_subobjectives_not_progressed_today(user)
     subobjectives = []
     user.objectives.each do |o|

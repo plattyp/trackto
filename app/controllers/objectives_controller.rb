@@ -9,6 +9,14 @@ class ObjectivesController < ApiController
     end
   end
 
+  def my_objectives
+    @objectives = Objective.objectives_with_subobjective_summary(current_user)
+
+    respond_to do |format|
+      format.json { render json: {"objectives": @objectives.to_json}, status: 200, content_type: 'application/json' }
+    end
+  end
+
   def show
     # if offset seconds were passed in then use them otherwise default to -18000
     timezoneOffsetSeconds = params[:timezoneOffsetSeconds] || -18000

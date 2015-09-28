@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     
     root 'objectives#index'
     get 'all_progress', to: 'progresses#all_progress'
+    get '/my_objectives' => "objectives#my_objectives", as: "my_objectives"
     get '/progress_overview' => "objectives#progress_overview", as: "progress_overview"
     get '/objectives_overview' => "objectives#objectives_overview", as: "objectives_overview"
     get '/subobjectives_today' => "objectives#subobjectives_today", as: "subobjectives_today"
