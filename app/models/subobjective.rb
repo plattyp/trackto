@@ -29,8 +29,10 @@ class Subobjective < ActiveRecord::Base
     most_recent_progress || Time.zone.local(1000, 12, 31, 01, 01, 01)
   end
 
-  def has_no_progress_today?
-    Time.zone.now.strftime("%m/%d/%Y") != last_progress_on.strftime("%m/%d/%Y")
+  def has_no_progress_today?(offset)
+    now_offset = Time.zone.now + offset
+    last_prog_offset = last_progress_on + offset
+    now_offset.strftime("%m/%d/%Y") != last_prog_offset.strftime("%m/%d/%Y")
   end
 
   def get_streak_in_last_days(daylimit)

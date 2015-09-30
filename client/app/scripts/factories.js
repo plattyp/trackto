@@ -35,7 +35,8 @@ function ObjectiveFactory($http) {
 
     // Methods to support charts
     objectiveFactory.getSubobjectivesToday = function() {
-        return $http.get('/api/subobjectives_today');
+        var params = 'timezoneOffsetSeconds=' + timeZoneOffset;
+        return $http.get('/api/subobjectives_today?' + params);
     };
 
     objectiveFactory.getProgressTrendForObjective = function(objectiveId,timeFrame) {

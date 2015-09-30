@@ -125,7 +125,10 @@ class ObjectivesController < ApiController
   end
 
   def subobjectives_today
-    @subobjectives = Objective.get_all_subobjectives_not_progressed_today(current_user)
+    # if offset seconds were passed in then use them otherwise default to -18000
+    timezoneOffsetSeconds = params[:timezoneOffsetSeconds].to_i || -18000
+
+    @subobjectives = Objective.get_all_subobjectives_not_progressed_today(current_user, timezoneOffsetSeconds)
     respond_to do |format|
       format.json { render 'objectives/json/subobjectives_today.json.erb', status: 200, content_type: 'application/json' }
     end
@@ -133,7 +136,7 @@ class ObjectivesController < ApiController
 
   def subobjectives_today_enhanced
     # if offset seconds were passed in then use them otherwise default to -18000
-    timezoneOffsetSeconds = params[:timezoneOffsetSeconds] || -18000
+    timezoneOffsetSeconds = params[:timezoneOffsetSeconds].to_i || -18000
 
     @subobjectives = Objective.get_all_subobjectives_not_progressed_today_with_detail(current_user,timezoneOffsetSeconds)
     respond_to do |format|

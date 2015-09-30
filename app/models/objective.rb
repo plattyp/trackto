@@ -30,11 +30,11 @@ class Objective < ActiveRecord::Base
     objectives
   end
 
-  def self.get_all_subobjectives_not_progressed_today(user)
+  def self.get_all_subobjectives_not_progressed_today(user,offsetseconds)
     subobjectives = []
     user.objectives.each do |o|
       o.subobjectives.each do |s|
-        if s.has_no_progress_today?
+        if s.has_no_progress_today?(offsetseconds)
           subobjectives << {id: s.id, name: s.name, description: s.description, objective_id: o.id, objective_name: o.name}
         end
       end
@@ -46,7 +46,7 @@ class Objective < ActiveRecord::Base
     subobjectives = []
     user.objectives.each do |o|
       o.subobjectives.each do |s|
-        if s.has_no_progress_today?
+        if s.has_no_progress_today?(offsetseconds)
           subobjectives << {id: s.id, name: s.name, description: s.description, objective_id: o.id, objective_name: o.name, sub_progress: s.progress, current_streak: s.get_current_subobjective_streak(offsetseconds)}
         end
       end
