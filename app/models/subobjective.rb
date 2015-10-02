@@ -1,3 +1,5 @@
+require 'time'
+
 class Subobjective < ActiveRecord::Base
   belongs_to :objective
   delegate :user, :to => :objective, :allow_nil => true
@@ -30,7 +32,7 @@ class Subobjective < ActiveRecord::Base
   end
 
   def has_no_progress_today?(offset)
-    now_offset = Time.zone.now + offset
+    now_offset = Time.now.utc + offset
     last_prog_offset = last_progress_on + offset
     now_offset.strftime("%m/%d/%Y") != last_prog_offset.strftime("%m/%d/%Y")
   end
